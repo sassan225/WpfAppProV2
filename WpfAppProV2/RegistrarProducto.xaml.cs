@@ -1,59 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.IO;
-
+using System.Windows;
 
 namespace WpfAppProV2
 {
-    /// <summary>
-    /// Lógica de interacción para RegistrarProducto.xaml
-    /// </summary>
     public partial class RegistrarProducto : Window
     {
-        private readonly string rutaArchivo = "c://LOGINS//productos.txt";
+        private readonly string rutaCarpeta = @"C:\cosmetiqueSoftware";
+        private readonly string rutaArchivo;
 
         public RegistrarProducto()
         {
             InitializeComponent();
-        }
 
+          
+            if (!Directory.Exists(rutaCarpeta))
+                Directory.CreateDirectory(rutaCarpeta);
+
+            rutaArchivo = Path.Combine(rutaCarpeta, "productos.txt");
+
+    
+            if (!File.Exists(rutaArchivo))
+                File.WriteAllText(rutaArchivo, string.Empty);
+        }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Directory.CreateDirectory("c://LOGINS");
+                if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                    string.IsNullOrWhiteSpace(txtCategoria.Text) ||
+                    string.IsNullOrWhiteSpace(txtPrecio.Text) ||
+                    string.IsNullOrWhiteSpace(txtStock.Text))
+                {
+                    MessageBox.Show("Completa todos los campos.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                int id = new Random().Next(1000, 9999);
+               
+                int id = File.ReadAllLines(rutaArchivo).Length + 1;
 
-                Producto p = new Producto(
-                    id,
-                    txtNombre.Text,
-                    txtCategoria.Text,
-                    Convert.ToDecimal(txtPrecio.Text),
-                    Convert.ToInt32(txtStock.Text)
-                );
+                Producto p = new Producto(id, txtNombre.Text, txtCategoria.Text,
+                                          Convert.ToDecimal(txtPrecio.Text),
+                                          Convert.ToInt32(txtStock.Text));
 
-                string linea = $"{p.IdProducto},{p.Nombre},{p.Categoria},{p.Precio},{p.Stock}";
+                string linea = $"{p.Id},{p.Nombre},{p.Categoria},{p.Precio},{p.Stock}";
                 File.AppendAllText(rutaArchivo, linea + Environment.NewLine);
 
-                MessageBox.Show("Producto guardado correctamente!");
+                MessageBox.Show("Producto guardado correctamente!", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 Limpiar();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar");
+                MessageBox.Show($"Error al guardar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -67,19 +66,19 @@ namespace WpfAppProV2
 
         private void BtnClose_Click(object sender, RoutedEventArgs e) => this.Close();
         private void BtnMinimize_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
                 DragMove();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
             Welcome welcome = new Welcome();
             welcome.Show();
 
+            this.Close();
         }
     }
 }
-

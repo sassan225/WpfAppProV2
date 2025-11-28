@@ -20,37 +20,45 @@ namespace WpfAppProV2
     /// </summary>
     public partial class VerProductos : Window
     {
-        private string rutaArchivo = "productos.txt";
+        private readonly string rutaArchivo = @"C:\cosmetiqueSoftware\productos.txt";
+
         public VerProductos()
         {
             InitializeComponent();
-            CargarProductos(); // Conexión: cargar productos al iniciar la ventana
+            CargarProductos();
         }
 
         private void CargarProductos()
         {
-            List<Producto> lista = new List<Producto>();
+            var lista = new List<Producto>();
 
-            if (File.Exists(rutaArchivo))
+            if (!File.Exists(rutaArchivo))
             {
-                string[] lineas = File.ReadAllLines(rutaArchivo);
+                dgProductos.ItemsSource = lista;
+                return;
+            }
 
-                foreach (string linea in lineas)
+            string[] lineas = File.ReadAllLines(rutaArchivo);
+
+            foreach (string linea in lineas)
+            {
+                if (!string.IsNullOrWhiteSpace(linea))
                 {
-                    string[] datos = linea.Split('|');
+                    string[] datos = linea.Split(',');
 
                     if (datos.Length == 5)
                     {
-                        lista.Add(new Producto
+                        if (int.TryParse(datos[0], out int id))
                         {
-                            IdProducto = int.Parse(datos[0]),
-                            Nombre = datos[1],
-                            Categoria = datos[2],
-                            Precio = decimal.Parse(datos[3]),
-                            Stock = int.Parse(datos[4])
-                        });
+                            if (decimal.TryParse(datos[3], out decimal precio))
+                            {
+                                if (int.TryParse(datos[4], out int stock))
+                                {
+                                    lista.Add(new Producto(id, datos[1], datos[2], precio, stock));
+                                }
+                            }
+                        }
                     }
-
                 }
             }
 

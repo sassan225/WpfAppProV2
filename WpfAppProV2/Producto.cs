@@ -10,7 +10,7 @@ namespace WpfAppProV2
     public class Producto
     {
 
-    public int IdProducto { get; set; }
+    public int Id{ get; set; }
     public string Nombre { get; set; }
     public string Categoria { get; set; }
     public decimal Precio { get; set; }
@@ -20,7 +20,7 @@ namespace WpfAppProV2
 
     public Producto(int id, string nombre, string categoria, decimal precio, int stock)
     {
-        IdProducto = id;
+        Id = id;
         Nombre = nombre;
         Categoria = categoria;
         Precio = precio;

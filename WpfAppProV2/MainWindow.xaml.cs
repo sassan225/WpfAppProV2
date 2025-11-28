@@ -1,27 +1,26 @@
-﻿
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
 
 namespace WpfAppProV2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly string rutaArchLogin = "c://LOGINS//loginsPro.txt";
+        private readonly string rutaArchLogin = @"C:\cosmetiqueSoftware\loginsPro.txt";
+
         public MainWindow()
         {
             InitializeComponent();
+
+            // Crear carpeta y archivo si no existen
+            string carpeta = Path.GetDirectoryName(rutaArchLogin);
+            if (!Directory.Exists(carpeta))
+                Directory.CreateDirectory(carpeta);
+
+            if (!File.Exists(rutaArchLogin))
+                File.WriteAllText(rutaArchLogin, string.Empty, Encoding.UTF8);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -40,35 +39,41 @@ namespace WpfAppProV2
             Application.Current.Shutdown();
         }
 
-
-
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-
-    
             string usuarioIngresado = txtUser.Text.Trim();
             string contraseniaIngresado = txtpass.Password.Trim();
-
             bool encontrado = false;
 
-            foreach (string linea in File.ReadAllLines(rutaArchLogin, Encoding.UTF8))
+            try
             {
-                string[] datos = linea.Split(',');
-
-                string correo = datos[1];
-                string pwd = datos[3];
-
-                if (usuarioIngresado == correo && contraseniaIngresado == pwd)
+                foreach (string linea in File.ReadAllLines(rutaArchLogin, Encoding.UTF8))
                 {
-                    encontrado = true;
-                    break;
+                    string[] datos = linea.Split(',');
+
+                    if (datos.Length < 4)
+                        continue;
+
+                    string correo = datos[1];
+                    string pwd = datos[3];
+
+                    if (usuarioIngresado == correo && contraseniaIngresado == pwd)
+                    {
+                        encontrado = true;
+                        break;
+                    }
                 }
+            }
+            catch
+            {
+                MessageBox.Show("Error al leer el archivo de logins.");
+                return;
             }
 
             if (encontrado)
             {
-                MessageBox.Show("Usuario encontrado, pasaste bro!");
-                Welcome welcome = new Welcome();
+                MessageBox.Show("¡Login exitoso!!.");
+                Welcome welcome = new Welcome(); 
                 welcome.Show();
                 this.Close();
             }
@@ -78,17 +83,11 @@ namespace WpfAppProV2
             }
         }
 
-
-
-
-        
-
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
             SignUp signup = new SignUp();
             signup.Show();
             this.Close();
-
         }
     }
 }

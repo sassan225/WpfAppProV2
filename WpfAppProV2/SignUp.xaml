@@ -238,13 +238,10 @@
                     <!--  BOTÓN SIGN UP  -->
                     <Button
                         x:Name="btnSignUp"
-                        Grid.Column="2"
-                        Width="30"
-                        Height="100"
                         Background="#209c68"
                         Click="btnSignUp_Click"
-                        Cursor="Hand">
-                        <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                        Cursor="Hand" Margin="148,400,148,75">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock
                                 FontFamily="Cascadia Mono"
                                 Foreground="White"

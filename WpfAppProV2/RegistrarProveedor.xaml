@@ -1,15 +1,12 @@
-﻿<Window x:Class="WpfAppProV2.RegistrarProducto"
+﻿<Window x:Class="WpfAppProV2.RegistrarProveedor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfAppProV2"
-        mc:Ignorable="d"
-        Title="RegistrarProducto" Height="450" Width="800"
+        Title="RegistrarProveedor" Height="450" Width="800"
         Background="Transparent"
-       WindowStyle="None"
+        WindowStyle="None"
+        AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        >
+        MouseDown="Window_MouseDown">
 
     <Border CornerRadius="20">
         <Border.Background>
@@ -18,9 +15,6 @@
 
         <Border BorderThickness="10" CornerRadius="20" Opacity="0.8">
             <Border.BorderBrush>
-
-              
-                
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Offset="0" Color="#1a8586"/>
                     <GradientStop Offset="0.3" Color="#B8C97A"/>
@@ -39,7 +33,6 @@
             </Border.Background>
 
             <Grid>
-            
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="*"/>
@@ -58,7 +51,7 @@
                                FontFamily="Cascadia Mono"
                                FontSize="16"
                                Foreground="Black"
-                               Text="REGISTRO DE PRODUCTOS"/>
+                               Text="REGISTRO DE PROVEEDORES"/>
 
                     <Button Grid.Column="1" Content="-" Background="#1a8586"
                             Foreground="White" Cursor="Hand"
@@ -68,7 +61,6 @@
                             Foreground="White" Cursor="Hand"
                             Click="BtnClose_Click"/>
                 </Grid>
-                
 
                 <!-- Formulario -->
                 <StackPanel Grid.Row="1" Margin="230,20,230,0">
@@ -77,32 +69,27 @@
                                FontSize="28"
                                HorizontalAlignment="Center"
                                Foreground="#1a8586"
-                               Text="Nuevo Producto"/>
+                               Text="Nuevo Proveedor"/>
 
-                    <TextBlock Margin="0,15,0,0" Text="Nombre:"/>
-                    <TextBox x:Name="txtNombre" Height="26" Margin="0,5,0,0"/>
+                    <TextBlock Margin="0,15,0,0" Text="Nombre Proveedor:"/>
+                    <TextBox x:Name="txtNombreProveedor" Height="26" Margin="0,5,0,0"/>
 
-                    <TextBlock Margin="0,15,0,0" Text="Categoría:"/>
-                    <TextBox x:Name="txtCategoria" Height="26" Margin="0,5,0,0"/>
+                    <TextBlock Margin="0,15,0,0" Text="Contacto:"/>
+                    <TextBox x:Name="txtContactoProveedor" Height="26" Margin="0,5,0,0"/>
 
-                    <TextBlock Margin="0,15,0,0" Text="Precio:"/>
-                    <TextBox x:Name="txtPrecio" Height="26" Margin="0,5,0,0"/>
+                    <TextBlock Margin="0,15,0,0" Text="Ciudad:"/>
+                    <TextBox x:Name="txtCiudadProveedor" Height="26" Margin="0,5,0,0"/>
 
-                    <TextBlock Margin="0,15,0,0" Text="Stock:"/>
-                    <TextBox x:Name="txtStock" Height="26" Margin="0,5,0,0"/>
-
-                    <Button x:Name="btnGuardar"
+                    <Button x:Name="btnGuardarProveedor"
                             Margin="0,25,0,0"
                             Background="#209c68"
                             Foreground="White"
                             Height="32"
                             Cursor="Hand"
-                            Content="GUARDAR PRODUCTO"
-                            Click="btnGuardar_Click"/>
+                            Content="GUARDAR PROVEEDOR"
+                            Click="btnGuardarProveedor_Click"/>
 
-                    <Button Content="back " Height="33" Width="186" Click="Button_Click"/>
-
-
+                    <Button Content="Back" Height="33" Width="186" Click="btnVolver_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
