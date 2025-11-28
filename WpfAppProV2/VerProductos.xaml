@@ -1,0 +1,113 @@
+﻿<Window x:Class="WpfAppProV2.VerProductos"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Productos Registrados"
+        Width="830"
+        Height="480"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
+
+    <Border CornerRadius="20">
+
+        <Border.Background>
+            <ImageBrush ImageSource="/sources/backOf.jpg"/>
+        </Border.Background>
+
+        <Border BorderThickness="10" CornerRadius="20" Opacity="0.8">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="#1a8586"/>
+                    <GradientStop Offset="0.3" Color="#B8C97A"/>
+                    <GradientStop Offset="0.7" Color="#D7E2B8"/>
+                    <GradientStop Offset="1" Color="#1a8586"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="#eaeace"/>
+                    <GradientStop Offset="0.3" Color="#c5cf8a"/>
+                    <GradientStop Offset="0.7" Color="#f3f3f3"/>
+                    <GradientStop Offset="1" Color="#c5cf8a"/>
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid Margin="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
+                <!-- Barra superior -->
+                <Grid Background="#1a8586">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="PRODUCTOS REGISTRADOS"
+                               VerticalAlignment="Center"
+                               FontFamily="Consolas"
+                               Margin="12,0,0,0"
+                               Foreground="White"
+                               FontWeight="Bold"
+                               FontSize="16"/>
+
+                    <Button Grid.Column="1"
+                            Content="X"
+                            Click="btnCerrar_Click"
+                            Background="#d9534f"
+                            Cursor="Hand"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            BorderThickness="0"/>
+                </Grid>
+
+                <!-- Tabla -->
+                <DataGrid x:Name="dgProductos"
+                          Grid.Row="1"
+                          Margin="15"
+                          AutoGenerateColumns="False"
+                          FontFamily="Cascadia Mono"
+                          FontSize="14"
+                          RowHeaderWidth="0"
+                          SelectionMode="Single"
+                          AlternatingRowBackground="#f3f3f3"
+                          BorderBrush="#1a8586"
+                          BorderThickness="2">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
+                        <DataGridTextColumn Header="Producto" Binding="{Binding Nombre}" Width="150"/>
+                        <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" Width="120"/>
+                        <DataGridTextColumn Header="Precio" Binding="{Binding Precio}" Width="100"/>
+                        <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="100"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+                <!-- Botón Volver -->
+                <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                    <Button Content="← REGRESAR"
+                            Width="180"
+                            Height="40"
+                            FontFamily="Consolas"
+                            Background="#1a8586"
+                            Foreground="White"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Click="btnVolver_Click"/>
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </Border>
+</Window>
