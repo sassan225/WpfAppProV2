@@ -15,13 +15,18 @@ using System.Windows.Shapes;
 namespace WpfAppProV2
 {
     /// <summary>
-    /// Lógica de interacción para Window1.xaml
+    /// Lógica de interacción para VerClienteF.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class VerClienteF : Window
     {
-        public Window1()
+        public VerClienteF()
         {
             InitializeComponent();
+        }
+
+        private void btnVolver_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

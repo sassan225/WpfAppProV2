@@ -43,7 +43,9 @@ namespace WpfAppProV2
         {
             string usuarioIngresado = txtUser.Text.Trim();
             string contraseniaIngresado = txtpass.Password.Trim();
-            bool encontrado = false;
+
+            string rolUsuario = null;
+            string nombreUsuario = null;
 
             try
             {
@@ -51,35 +53,53 @@ namespace WpfAppProV2
                 {
                     string[] datos = linea.Split(',');
 
-                    if (datos.Length < 4)
-                        continue;
+                    if (datos.Length < 4) continue;
 
+                    string nombre = datos[0];
                     string correo = datos[1];
+                    string rol = datos[2];
                     string pwd = datos[3];
 
                     if (usuarioIngresado == correo && contraseniaIngresado == pwd)
                     {
-                        encontrado = true;
+                        rolUsuario = rol;
+                        nombreUsuario = nombre;
                         break;
                     }
                 }
             }
             catch
             {
-                MessageBox.Show("Error al leer el archivo de logins.");
+                MessageBox.Show("Error al leer el archivo de logins.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (encontrado)
+            if (rolUsuario != null)
             {
-                MessageBox.Show("¡Login exitoso!!.");
-                Welcome welcome = new Welcome(); 
-                welcome.Show();
+                MessageBox.Show($"Bienvenido {nombreUsuario} ({rolUsuario})", "Login exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Abrir ventana según rol
+                if (rolUsuario == "SUPERADMIN")
+                {
+                    PanelSuperAdmin panel = new PanelSuperAdmin();
+                    panel.Show();
+                }
+                else if (rolUsuario == "ADMIN")
+                {
+                    PanelAdmin panel = new PanelAdmin();
+                    panel.Show();
+                }
+                else if (rolUsuario == "CLIENTE")
+                {
+                    PanelCliente panel = new PanelCliente();
+                    panel.Show();
+                }
+
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Usuario o contraseña incorrectos.");
+                MessageBox.Show("⚠ Usuario o contraseña incorrectos.");
             }
         }
 

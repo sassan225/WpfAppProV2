@@ -6,9 +6,9 @@ namespace WpfAppProV2
     /// <summary>
     /// Lógica de interacción para Welcome.xaml
     /// </summary>
-    public partial class Welcome : Window
+    public partial class AdminPanel : Window
     {
-        public Welcome()
+        public AdminPanel()
         {
             InitializeComponent();
         }

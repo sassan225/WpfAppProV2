@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="RegistrarProducto" Height="450" Width="800"
         Background="Transparent"
-       WindowStyle="None"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         >
 
@@ -92,7 +92,7 @@
                     <TextBox x:Name="txtStock" Height="26" Margin="0,5,0,0"/>
 
                     <Button x:Name="btnGuardar"
-                            Margin="0,25,0,0"
+                            Margin="0,15,0,0"
                             Background="#209c68"
                             Foreground="White"
                             Height="32"
@@ -100,7 +100,7 @@
                             Content="GUARDAR PRODUCTO"
                             Click="btnGuardar_Click"/>
 
-                    <Button Content="back " Height="33" Width="186" Click="Button_Click"/>
+                    <Button Content="back " Height="33" Width="186" Click="Button_Click" Margin="0,10"/>
 
 
                 </StackPanel>

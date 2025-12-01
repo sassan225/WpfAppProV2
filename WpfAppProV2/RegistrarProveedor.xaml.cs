@@ -49,6 +49,8 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
+            Welcome welcome = new Welcome();
+            welcome.Show();
             this.Close();
         }
 

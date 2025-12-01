@@ -88,8 +88,7 @@
                             Cursor="Hand"
                             Content="GUARDAR PROVEEDOR"
                             Click="btnGuardarProveedor_Click"/>
-
-                    <Button Content="Back" Height="33" Width="186" Click="btnVolver_Click"/>
+                    <Button Content="Back" Height="33" Width="186" Click="btnVolver_Click" Margin="0,20"/>
                 </StackPanel>
             </Grid>
         </Border>
