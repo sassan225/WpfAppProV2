@@ -8,20 +8,21 @@ namespace WpfAppProV2
     {
         private readonly string rutaCarpeta = @"C:\cosmetiqueSoftware";
         private readonly string rutaArchivo;
+        private readonly string origen;
 
-        public RegistrarProducto()
+        public RegistrarProducto(string origen = "welcome")
         {
             InitializeComponent();
 
-          
             if (!Directory.Exists(rutaCarpeta))
                 Directory.CreateDirectory(rutaCarpeta);
 
             rutaArchivo = Path.Combine(rutaCarpeta, "productos.txt");
 
-    
             if (!File.Exists(rutaArchivo))
                 File.WriteAllText(rutaArchivo, string.Empty);
+
+            this.origen = origen;
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -37,7 +38,6 @@ namespace WpfAppProV2
                     return;
                 }
 
-               
                 int id = File.ReadAllLines(rutaArchivo).Length + 1;
 
                 Producto p = new Producto(id, txtNombre.Text, txtCategoria.Text,
@@ -73,12 +73,25 @@ namespace WpfAppProV2
                 DragMove();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Welcome welcome = new Welcome();
-            welcome.Show();
+                private void Button_Click(object sender, RoutedEventArgs e)
+                {
+                    Window ventanaDestino = null;
 
-            this.Close();
-        }
+                    switch (origen.ToLower())
+                    {
+                        case "superadmin":
+                            ventanaDestino = new PanelSuperAdmin();
+                            break;
+                        case "admin":
+                            ventanaDestino = new AdminPanel();
+                            break;
+                        default:
+                            MessageBox.Show("Origen desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                    }
+
+                    ventanaDestino.Show();
+                    this.Close();
+                }
     }
 }

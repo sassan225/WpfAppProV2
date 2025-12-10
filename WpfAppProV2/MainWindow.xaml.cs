@@ -86,14 +86,14 @@ namespace WpfAppProV2
                 }
                 else if (rolUsuario == "ADMIN")
                 {
-                    PanelAdmin panel = new PanelAdmin();
+                    AdminPanel panel = new AdminPanel();
                     panel.Show();
                 }
-                else if (rolUsuario == "CLIENTE")
-                {
-                    PanelCliente panel = new PanelCliente();
-                    panel.Show();
-                }
+                //else if (rolUsuario == "CLIENTE")
+                //{
+                //    PanelCliente panel = new PanelCliente();
+                //    panel.Show();
+                //}
 
                 this.Close();
             }

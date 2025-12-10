@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Glimpse.Mvc5" Version="1.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="sources\backOf.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

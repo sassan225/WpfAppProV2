@@ -13,13 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace WpfAppProV2
-{
+{           
     /// <summary>
     /// Lógica de interacción para RegistrarClienteF.xaml
     /// </summary>
     public partial class RegistrarClienteF : Window
     {
-        public RegistrarClienteF()
+        public RegistrarClienteF()          
         {
             InitializeComponent();
         }
@@ -29,6 +29,26 @@ namespace WpfAppProV2
             this.Close();
             VerClienteF verClienteF = new VerClienteF();
             verClienteF.Show();
+        }
+
+        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }   
+  
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left) { this.Close(); }
+    }
+
+        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

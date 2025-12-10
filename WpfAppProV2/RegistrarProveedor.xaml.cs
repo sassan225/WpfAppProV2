@@ -8,8 +8,9 @@ namespace WpfAppProV2
     {
         private string carpetaBase = @"C:\cosmetiqueSoftware";
         private string rutaArchivo;
+        private readonly Window? _ventanaOrigen;
 
-        public RegistrarProveedor()
+        public RegistrarProveedor(Window? ventanaOrigen = null)
         {
             InitializeComponent();
 
@@ -18,6 +19,7 @@ namespace WpfAppProV2
                 Directory.CreateDirectory(carpetaBase);
 
             rutaArchivo = Path.Combine(carpetaBase, "proveedores.txt");
+            _ventanaOrigen = ventanaOrigen;
         }
 
         private void btnGuardarProveedor_Click(object sender, RoutedEventArgs e)
@@ -49,8 +51,7 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            Welcome welcome = new Welcome();
-            welcome.Show();
+            _ventanaOrigen?.Show();
             this.Close();
         }
 

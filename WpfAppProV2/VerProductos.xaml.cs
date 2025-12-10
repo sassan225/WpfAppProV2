@@ -21,10 +21,14 @@ namespace WpfAppProV2
     public partial class VerProductos : Window
     {
         private readonly string rutaArchivo = @"C:\cosmetiqueSoftware\productos.txt";
+        private readonly string _rolUsuario; // Nuevo campo para el rol
 
-        public VerProductos()
+        // Modifica el constructor para aceptar el rol
+        public VerProductos(string rolUsuario)
         {
             InitializeComponent();
+            _rolUsuario = rolUsuario;
+            _rolUsuario = rolUsuario;
             CargarProductos();
         }
 
@@ -67,8 +71,9 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            Welcome w = new Welcome();
-            w.Show();
+            // Suponiendo que la ventana principal es MainWindow y NO acepta el rol como parámetro
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
             this.Close();
         }
 

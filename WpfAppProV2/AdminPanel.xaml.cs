@@ -31,9 +31,11 @@ namespace WpfAppProV2
             this.Hide();
         }
 
+        private readonly string _rolUsuario = "admin"; // O el rol que corresponda
+
         private void btnVerProductos_Click(object sender, RoutedEventArgs e)
         {
-            VerProductos ventana = new VerProductos();
+            VerProductos ventana = new VerProductos(_rolUsuario);
             ventana.Show();
             this.Hide();
         }

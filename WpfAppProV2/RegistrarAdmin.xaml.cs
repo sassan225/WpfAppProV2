@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfAppProV2
 {
@@ -22,6 +12,39 @@ namespace WpfAppProV2
         public RegistrarAdmin()
         {
             InitializeComponent();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+            
+        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            // Lógica para guardar el nuevo admin
+            // Por ejemplo:
+            // string nombre = txtNombre.Text;
+            // string correo = txtCorreo.Text;
+            // string contrasena = txtContrasena.Password;
+            // Aquí puedes agregar la lógica de guardado según tu aplicación
+        }
+
+        private void btnVolver_Click(object sender, RoutedEventArgs e)
+        {
+            PanelSuperAdmin panelSuperAdmin = new PanelSuperAdmin();
+            panelSuperAdmin.Show();
+            this.Close();
         }
     }
 }

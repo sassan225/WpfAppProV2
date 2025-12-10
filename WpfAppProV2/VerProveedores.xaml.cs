@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -57,12 +56,33 @@ namespace WpfAppProV2
             dgProveedores.ItemsSource = lista;
         }
 
-        private void btnVolver_Click(object sender, RoutedEventArgs e)
-        {
-            Welcome w = new Welcome();
-            w.Show();
-            this.Close();
-        }
+            private void btnVolver_Click(object sender, RoutedEventArgs e)
+            {
+                // Obtener el rol del usuario actual de forma segura
+                string? rolUsuario = App.Current.Properties["RolUsuario"] as string; // Ejemplo: "SuperAdmin" o "Admin"
+
+                Window? ventanaDestino = null;
+
+                if (rolUsuario == "SuperAdmin")
+                {
+                    ventanaDestino = new PanelSuperAdmin(); // Asegúrate de tener esta ventana creada
+                }
+                else if (rolUsuario == "Admin")
+                {
+                    ventanaDestino = new AdminPanel(); // Asegúrate de tener esta ventana creada
+                }
+
+                if (ventanaDestino != null)
+                {
+                    ventanaDestino.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("No se pudo determinar el rol del usuario. Por favor, inicie sesión nuevamente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Application.Current.Shutdown();
+                }
+            }
 
         private void btnCerrar_Click(object sender, RoutedEventArgs e)
         {
