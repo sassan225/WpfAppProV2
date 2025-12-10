@@ -1,25 +1,27 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 
 namespace WpfAppProV2
 {
     public partial class RegistrarProveedor : Window
     {
-        private string carpetaBase = @"C:\cosmetiqueSoftware";
-        private string rutaArchivo;
-        private readonly Window? _ventanaOrigen;
+        private readonly string carpetaBase = @"C:\cosmetiqueSoftware";
+        private readonly string rutaArchivo;
+        private readonly string _rolUsuario; // Guardamos el rol
 
-        public RegistrarProveedor(Window? ventanaOrigen = null)
+        // Constructor que recibe el rol
+        public RegistrarProveedor(string rolUsuario)
         {
             InitializeComponent();
 
-            // Crear carpeta si no existe
+            _rolUsuario = rolUsuario;
+
             if (!Directory.Exists(carpetaBase))
                 Directory.CreateDirectory(carpetaBase);
 
             rutaArchivo = Path.Combine(carpetaBase, "proveedores.txt");
-            _ventanaOrigen = ventanaOrigen;
         }
 
         private void btnGuardarProveedor_Click(object sender, RoutedEventArgs e)
@@ -39,7 +41,6 @@ namespace WpfAppProV2
                 Ciudad = txtCiudadProveedor.Text
             };
 
-            // Guardar en archivo en la carpeta central
             File.AppendAllText(rutaArchivo, nuevo.ToString() + Environment.NewLine);
 
             MessageBox.Show("Proveedor guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -51,7 +52,25 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            _ventanaOrigen?.Show();
+            Window ventanaDestino = null;
+
+            if (_rolUsuario.Equals("SUPERADMIN", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new PanelSuperAdmin();
+            }
+            else if (_rolUsuario.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new AdminPanel();
+            }
+            else
+            {
+                MessageBox.Show("No se pudo determinar el rol del usuario. Inicie sesión nuevamente.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+                return;
+            }
+
+            ventanaDestino.Show();
             this.Close();
         }
 
@@ -65,9 +84,9 @@ namespace WpfAppProV2
             this.WindowState = WindowState.Minimized;
         }
 
-        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
         }
     }

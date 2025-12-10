@@ -10,7 +10,7 @@ namespace WpfAppProV2
         private readonly string rutaArchivo;
         private readonly string origen;
 
-        public RegistrarProducto(string origen = "welcome")
+        public RegistrarProducto(string origen)
         {
             InitializeComponent();
 
@@ -19,7 +19,7 @@ namespace WpfAppProV2
 
             rutaArchivo = Path.Combine(rutaCarpeta, "productos.txt");
 
-            if (!File.Exists(rutaArchivo))
+            if (!File.Exists(rutaArchivo))  
                 File.WriteAllText(rutaArchivo, string.Empty);
 
             this.origen = origen;
@@ -73,25 +73,26 @@ namespace WpfAppProV2
                 DragMove();
         }
 
-                private void Button_Click(object sender, RoutedEventArgs e)
-                {
-                    Window ventanaDestino = null;
+     
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Window ventanaDestino;
+            if (origen.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new PanelSuperAdmin();
+            }
+            else if (origen.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new AdminPanel();
+            }
+            else
+            {
+                MessageBox.Show("Origen desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-                    switch (origen.ToLower())
-                    {
-                        case "superadmin":
-                            ventanaDestino = new PanelSuperAdmin();
-                            break;
-                        case "admin":
-                            ventanaDestino = new AdminPanel();
-                            break;
-                        default:
-                            MessageBox.Show("Origen desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                    }
-
-                    ventanaDestino.Show();
-                    this.Close();
-                }
+            ventanaDestino.Show();
+            this.Close();
+        }
     }
 }

@@ -1,41 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfAppProV2
-{           
-    /// <summary>
-    /// Lógica de interacción para RegistrarClienteF.xaml
-    /// </summary>
+{
     public partial class RegistrarClienteF : Window
     {
-        public RegistrarClienteF()          
+        private readonly string rutaCarpeta = @"C:\cosmetiqueSoftware";
+        private readonly string rutaArchivo;
+
+        private readonly string origen;   // MISMA LÓGICA QUE LOS OTROS FORMULARIOS
+
+        public RegistrarClienteF(string origen = "admin")
         {
             InitializeComponent();
+
+            this.origen = origen;
+
+            if (!Directory.Exists(rutaCarpeta))
+                Directory.CreateDirectory(rutaCarpeta);
+
+            rutaArchivo = Path.Combine(rutaCarpeta, "clientesF.txt");
+
+            if (!File.Exists(rutaArchivo))
+                File.WriteAllText(rutaArchivo, string.Empty);
         }
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
+            Window ventanaDestino;
+
+            if (origen.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new PanelSuperAdmin();
+            }
+            else if (origen.Equals("admin", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new AdminPanel();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Origen desconocido.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+                return;
+            }
+
+            ventanaDestino.Show();
             this.Close();
-            VerClienteF verClienteF = new VerClienteF();
-            verClienteF.Show();
         }
 
         private void BtnMinimize_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
-        }   
-  
+        }
+
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -43,12 +66,57 @@ namespace WpfAppProV2
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left) { this.Close(); }
-    }
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                    string.IsNullOrWhiteSpace(txtCorreo.Text) ||
+                    string.IsNullOrWhiteSpace(txtTelefono.Text))
+                {
+                    MessageBox.Show(
+                        "Completa todos los campos.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
 
+                int id = File.ReadAllLines(rutaArchivo).Length + 1;
+
+                string linea = $"{id},{txtNombre.Text},{txtCorreo.Text},{txtTelefono.Text}";
+                File.AppendAllText(rutaArchivo, linea + Environment.NewLine);
+
+                MessageBox.Show(
+                    "Cliente frecuente guardado correctamente!",
+                    "Éxito",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
+                Limpiar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error al guardar: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        private void Limpiar()
+        {
+            txtNombre.Clear();
+            txtCorreo.Clear();
+            txtTelefono.Clear();
         }
     }
 }

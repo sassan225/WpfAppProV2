@@ -3,11 +3,10 @@ using System.Windows.Input;
 
 namespace WpfAppProV2
 {
-    /// <summary>
-    /// Lógica de interacción para Welcome.xaml
-    /// </summary>
     public partial class AdminPanel : Window
     {
+        private readonly string _rolUsuario = "admin"; // Rol del panel
+
         public AdminPanel()
         {
             InitializeComponent();
@@ -26,12 +25,11 @@ namespace WpfAppProV2
 
         private void btnRegistrarProducto_Click(object sender, RoutedEventArgs e)
         {
-            RegistrarProducto ventana = new RegistrarProducto();
+            // Pasamos el rol al abrir RegistrarProducto
+            RegistrarProducto ventana = new RegistrarProducto(_rolUsuario);
             ventana.Show();
             this.Hide();
         }
-
-        private readonly string _rolUsuario = "admin"; // O el rol que corresponda
 
         private void btnVerProductos_Click(object sender, RoutedEventArgs e)
         {
@@ -42,14 +40,14 @@ namespace WpfAppProV2
 
         private void btnRegistrarProveedor_Click(object sender, RoutedEventArgs e)
         {
-            RegistrarProveedor ventana = new RegistrarProveedor();
+            RegistrarProveedor ventana = new RegistrarProveedor(_rolUsuario);
             ventana.Show();
             this.Hide();
         }
 
         private void btnVerProveedores_Click(object sender, RoutedEventArgs e)
         {
-            VerProveedores ventana = new VerProveedores();
+            VerProveedores ventana = new VerProveedores(_rolUsuario);
             ventana.Show();
             this.Hide();
         }

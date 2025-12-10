@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="sources\back-image.jfif" />
     <None Remove="sources\backOf.jpg" />
+    <None Remove="sources\FondoAdmin.jpg" />
     <None Remove="sources\Icon.png" />
     <None Remove="sources\iconPf3.png" />
     <None Remove="sources\logo-Pajaro-Photoroom.png" />
@@ -27,6 +28,9 @@
 
   <ItemGroup>
     <Resource Include="sources\backOf.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="sources\FondoAdmin.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="sources\iconPf3.png">

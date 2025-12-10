@@ -9,13 +9,15 @@ namespace WpfAppProV2
 {
     public partial class VerClienteF : Window
     {
-        private string carpetaBase = @"C:\cosmetiqueSoftware";
-        private string rutaArchivo;
+        private readonly string _rolUsuario; // rol que viene del panel
+        private readonly string carpetaBase = @"C:\cosmetiqueSoftware";
+        private readonly string rutaArchivo;
         private List<ClienteF> listaClientes = new List<ClienteF>();
 
-        public VerClienteF()
+        public VerClienteF(string rolUsuario)
         {
             InitializeComponent();
+            _rolUsuario = rolUsuario;
 
             if (!Directory.Exists(carpetaBase))
                 Directory.CreateDirectory(carpetaBase);
@@ -37,14 +39,14 @@ namespace WpfAppProV2
                 {
                     string[] datos = linea.Split(',');
 
-                    if (datos.Length == 4)
+                    if (datos.Length == 3) // solo Id, Nombre, Correo
                     {
                         listaClientes.Add(new ClienteF
                         {
                             IdCliente = int.Parse(datos[0]),
                             Nombre = datos[1],
-                            Correo = datos[2],
-                         });
+                            Correo = datos[2]
+                        });
                     }
                 }
             }
@@ -55,14 +57,20 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            PanelSuperAdmin panel = new PanelSuperAdmin();
-            panel.Show();
+            Window ventanaDestino;
+
+            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
+                ventanaDestino = new PanelSuperAdmin();
+            else
+                ventanaDestino = new AdminPanel();
+
+            ventanaDestino.Show();
             this.Close();
         }
 
         private void btnAñadir_Click(object sender, RoutedEventArgs e)
         {
-            RegistrarClienteF registrar = new RegistrarClienteF();
+            RegistrarClienteF registrar = new RegistrarClienteF(_rolUsuario);
             registrar.Show();
             this.Close();
         }

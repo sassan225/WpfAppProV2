@@ -14,7 +14,6 @@ namespace WpfAppProV2
         {
             InitializeComponent();
 
-            // Crear carpeta y archivo si no existen
             string carpeta = Path.GetDirectoryName(rutaArchLogin);
             if (!Directory.Exists(carpeta))
                 Directory.CreateDirectory(carpeta);
@@ -62,23 +61,29 @@ namespace WpfAppProV2
 
                     if (usuarioIngresado == correo && contraseniaIngresado == pwd)
                     {
-                        rolUsuario = rol;
-                        nombreUsuario = nombre;
+                        rolUsuario = rol.Trim();
+                        nombreUsuario = nombre.Trim();
                         break;
                     }
                 }
             }
             catch
             {
-                MessageBox.Show("Error al leer el archivo de logins.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error al leer el archivo de logins.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (rolUsuario != null)
             {
-                MessageBox.Show($"Bienvenido {nombreUsuario} ({rolUsuario})", "Login exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Bienvenido {nombreUsuario} ({rolUsuario})",
+                    "Login exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Abrir ventana según rol
+                // Guardar globalmente
+                App.Current.Properties["RolUsuario"] = rolUsuario;
+                App.Current.Properties["NombreUsuario"] = nombreUsuario;
+
+                // Abrir panel según rol
                 if (rolUsuario == "SUPERADMIN")
                 {
                     PanelSuperAdmin panel = new PanelSuperAdmin();
@@ -89,17 +94,12 @@ namespace WpfAppProV2
                     AdminPanel panel = new AdminPanel();
                     panel.Show();
                 }
-                //else if (rolUsuario == "CLIENTE")
-                //{
-                //    PanelCliente panel = new PanelCliente();
-                //    panel.Show();
-                //}
 
                 this.Close();
             }
             else
             {
-                MessageBox.Show("⚠ Usuario o contraseña incorrectos.");
+                MessageBox.Show("Usuario o contraseña incorrectos.");
             }
         }
 

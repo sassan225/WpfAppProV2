@@ -46,7 +46,7 @@
                         Foreground="White"
                         FontWeight="Bold"
                         Cursor="Hand"
-                        Click="btnLogout_Click"/>
+                        Click="btnClose_Click" Height="35" VerticalAlignment="Top"/>
             </Grid>
 
             <!-- Contenido central -->
@@ -128,7 +128,7 @@
 
                     <Button x:Name="btnCerrarSesion" Content="⛔ Cerrar Sesión" Height="60" FontSize="20"
                             Background="#e94560" Foreground="White" BorderThickness="0" Cursor="Hand"
-                            Click="btnLogout_Click"/>
+                            Click="BtnLogout_Click"/>
                 </StackPanel>
 
             </StackPanel>

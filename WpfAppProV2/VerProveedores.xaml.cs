@@ -6,18 +6,18 @@ using System.Windows.Input;
 
 namespace WpfAppProV2
 {
-    /// <summary>
-    /// Lógica de interacción para VerProveedores.xaml
-    /// </summary>
     public partial class VerProveedores : Window
     {
-        private string carpetaBase = @"C:\cosmetiqueSoftware";
+        private readonly string carpetaBase = @"C:\cosmetiqueSoftware";
+        private readonly string rutaArchivo;
 
-        private string rutaArchivo;
+        private readonly string _rolUsuario;   // MISMO ENFOQUE QUE EN RegistrarProducto Y VerProductos
 
-        public VerProveedores()
+        public VerProveedores(string rolUsuario)
         {
             InitializeComponent();
+
+            _rolUsuario = rolUsuario;
 
             if (!Directory.Exists(carpetaBase))
                 Directory.CreateDirectory(carpetaBase);
@@ -39,11 +39,10 @@ namespace WpfAppProV2
                 {
                     string[] datos = linea.Split(',');
 
-                    if (datos.Length == 4) 
+                    if (datos.Length == 4)
                     {
                         lista.Add(new Proveedor
                         {
-                       
                             IdProveedor = int.Parse(datos[0]),
                             NombreProveedor = datos[1],
                             ContactoProveedor = datos[2],
@@ -56,33 +55,27 @@ namespace WpfAppProV2
             dgProveedores.ItemsSource = lista;
         }
 
-            private void btnVolver_Click(object sender, RoutedEventArgs e)
+        private void btnVolver_Click(object sender, RoutedEventArgs e)
+        {
+            Window ventanaDestino;
+
+            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
             {
-                // Obtener el rol del usuario actual de forma segura
-                string? rolUsuario = App.Current.Properties["RolUsuario"] as string; // Ejemplo: "SuperAdmin" o "Admin"
-
-                Window? ventanaDestino = null;
-
-                if (rolUsuario == "SuperAdmin")
-                {
-                    ventanaDestino = new PanelSuperAdmin(); // Asegúrate de tener esta ventana creada
-                }
-                else if (rolUsuario == "Admin")
-                {
-                    ventanaDestino = new AdminPanel(); // Asegúrate de tener esta ventana creada
-                }
-
-                if (ventanaDestino != null)
-                {
-                    ventanaDestino.Show();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("No se pudo determinar el rol del usuario. Por favor, inicie sesión nuevamente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Application.Current.Shutdown();
-                }
+                ventanaDestino = new PanelSuperAdmin();
             }
+            else if (_rolUsuario.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new AdminPanel();
+            }
+            else
+            {
+                MessageBox.Show("Origen desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ventanaDestino.Show();
+            this.Close();
+        }
 
         private void btnCerrar_Click(object sender, RoutedEventArgs e)
         {

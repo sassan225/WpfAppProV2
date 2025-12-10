@@ -1,33 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.IO;
+using System.Windows;
 
 namespace WpfAppProV2
 {
-    /// <summary>
-    /// Lógica de interacción para VerProductos.xaml
-    /// </summary>
     public partial class VerProductos : Window
     {
         private readonly string rutaArchivo = @"C:\cosmetiqueSoftware\productos.txt";
-        private readonly string _rolUsuario; // Nuevo campo para el rol
+        private readonly string _rolUsuario;
 
-        // Modifica el constructor para aceptar el rol
         public VerProductos(string rolUsuario)
         {
             InitializeComponent();
-            _rolUsuario = rolUsuario;
             _rolUsuario = rolUsuario;
             CargarProductos();
         }
@@ -50,18 +35,12 @@ namespace WpfAppProV2
                 {
                     string[] datos = linea.Split(',');
 
-                    if (datos.Length == 5)
+                    if (datos.Length == 5 &&
+                        int.TryParse(datos[0], out int id) &&
+                        decimal.TryParse(datos[3], out decimal precio) &&
+                        int.TryParse(datos[4], out int stock))
                     {
-                        if (int.TryParse(datos[0], out int id))
-                        {
-                            if (decimal.TryParse(datos[3], out decimal precio))
-                            {
-                                if (int.TryParse(datos[4], out int stock))
-                                {
-                                    lista.Add(new Producto(id, datos[1], datos[2], precio, stock));
-                                }
-                            }
-                        }
+                        lista.Add(new Producto(id, datos[1], datos[2], precio, stock));
                     }
                 }
             }
@@ -71,9 +50,23 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            // Suponiendo que la ventana principal es MainWindow y NO acepta el rol como parámetro
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
+            Window ventanaDestino;
+
+            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new PanelSuperAdmin();
+            }
+            else if (_rolUsuario.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            {
+                ventanaDestino = new AdminPanel();
+            }
+            else
+            {
+                MessageBox.Show("Origen desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ventanaDestino.Show();
             this.Close();
         }
 
@@ -89,4 +82,3 @@ namespace WpfAppProV2
         }
     }
 }
-
