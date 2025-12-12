@@ -86,11 +86,14 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- Botones Añadir / Borrar / Regresar -->
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Content="Añadir" Width="118" Height="40" FontFamily="Consolas" Background="#209c68" Foreground="White" BorderThickness="0" Cursor="Hand" Click="btnAñadir_Click" />
-                    <Button Content="Borrar" Width="120" Height="40" FontFamily="Consolas" Background="#d9534f" Foreground="White" BorderThickness="0" Cursor="Hand" Click="btnBorrar_Click" Margin="10"/>
-                    <Button Content="Regresar" Width="120" Height="40" FontFamily="Consolas" Background="#1a8586" Foreground="White" BorderThickness="0" Cursor="Hand" Click="btnVolver_Click"/>
+                <!-- Botones Acciones con emojis -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
+                    <Button Width="150" Height="40" Background="#209c68" BorderThickness="0" Cursor="Hand" FontFamily="Segoe UI Emoji"
+                            Click="btnAñadir_Click" Content="➕ Añadir Cliente" Foreground="White"/>
+                    <Button Width="150" Height="40" Background="#f58c96" BorderThickness="0" Cursor="Hand" FontFamily="Segoe UI Emoji"
+                            Click="btnBorrar_Click" Content="🗑 Borrar Cliente" Foreground="White" Margin="10,0,10,0"/>
+                    <Button Width="150" Height="40" Background="#1a8586" BorderThickness="0" Cursor="Hand" FontFamily="Segoe UI Emoji"
+                            Click="btnVolver_Click" Content="← Regresar" Foreground="White"/>
                 </StackPanel>
 
             </Grid>

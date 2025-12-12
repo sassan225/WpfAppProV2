@@ -65,7 +65,7 @@
                 </Grid>
 
                 <!-- Formulario -->
-                <StackPanel Grid.Row="1" Margin="230,20,230,0">
+                <StackPanel Grid.Row="1" Margin="230,20,230,0" VerticalAlignment="Top">
 
                     <TextBlock FontFamily="Cascadia Mono"
                                FontSize="28"
@@ -77,7 +77,7 @@
                     <TextBox x:Name="txtNombre" Height="26" Margin="0,5,0,0"/>
 
                     <TextBlock Margin="0,15,0,0" Text="Categoría:"/>
-                    <ComboBox x:Name="cmbCategoria" Height="26" Margin="0,5,0,0">
+                    <ComboBox x:Name="cmbCategoria" Height="26" Margin="0,5,0,0" SelectedIndex="0">
                         <ComboBoxItem Content="Cosméticos"/>
                         <ComboBoxItem Content="Perfumes"/>
                         <ComboBoxItem Content="Accesorios"/>

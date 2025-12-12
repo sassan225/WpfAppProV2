@@ -129,9 +129,9 @@ namespace WpfAppProV2
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
+            this.Close();
         }
     }
 }

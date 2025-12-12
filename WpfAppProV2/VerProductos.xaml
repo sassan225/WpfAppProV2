@@ -1,111 +1,166 @@
-﻿<Window x:Class="WpfAppProV2.VerProductos"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Productos Registrados"
-        Width="830"
-        Height="480"
-        AllowsTransparency="True"
-        Background="Transparent"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown">
+﻿<Window
+    x:Class="WpfAppProV2.VerProductos"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Productos Registrados"
+    Width="830"
+    Height="480"
+    AllowsTransparency="True"
+    Background="Transparent"
+    MouseDown="Window_MouseDown"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
 
     <Border CornerRadius="20">
 
         <Border.Background>
-            <ImageBrush ImageSource="/sources/backOf.jpg"/>
+            <ImageBrush ImageSource="/sources/backOf.jpg" />
         </Border.Background>
 
-        <Border BorderThickness="10" CornerRadius="20" Opacity="0.8">
+        <Border
+            BorderThickness="10"
+            CornerRadius="20"
+            Opacity="0.8">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="#1a8586"/>
-                    <GradientStop Offset="0.3" Color="#B8C97A"/>
-                    <GradientStop Offset="0.7" Color="#D7E2B8"/>
-                    <GradientStop Offset="1" Color="#1a8586"/>
+                    <GradientStop Offset="0" Color="#1a8586" />
+                    <GradientStop Offset="0.3" Color="#B8C97A" />
+                    <GradientStop Offset="0.7" Color="#D7E2B8" />
+                    <GradientStop Offset="1" Color="#1a8586" />
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="#eaeace"/>
-                    <GradientStop Offset="0.3" Color="#c5cf8a"/>
-                    <GradientStop Offset="0.7" Color="#f3f3f3"/>
-                    <GradientStop Offset="1" Color="#c5cf8a"/>
+                    <GradientStop Offset="0" Color="#eaeace" />
+                    <GradientStop Offset="0.3" Color="#c5cf8a" />
+                    <GradientStop Offset="0.7" Color="#f3f3f3" />
+                    <GradientStop Offset="1" Color="#c5cf8a" />
                 </LinearGradientBrush>
             </Border.Background>
 
             <Grid Margin="10">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="80" />
                 </Grid.RowDefinitions>
 
-                <!-- Barra superior -->
+                <!--  Barra superior  -->
                 <Grid Background="#1a8586">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="PRODUCTOS REGISTRADOS"
-                               VerticalAlignment="Center"
-                               FontFamily="Consolas"
-                               Margin="12,0,0,0"
-                               Foreground="White"
-                               FontWeight="Bold"
-                               FontSize="16"/>
+                    <TextBlock
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Consolas"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="PRODUCTOS REGISTRADOS" />
 
-                    <Button Grid.Column="1"
-                            Content="X"
-                            Click="btnCerrar_Click"
-                            Background="#d9534f"
-                            Cursor="Hand"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            BorderThickness="0"/>
+                    <Button
+                        Grid.Column="1"
+                        Background="#d9534f"
+                        BorderThickness="0"
+                        Click="btnCerrar_Click"
+                        Content="X"
+                        Cursor="Hand"
+                        FontWeight="Bold"
+                        Foreground="White" />
                 </Grid>
 
-                <!-- Tabla -->
-                <DataGrid x:Name="dgProductos"
-                          Grid.Row="1"
-                          Margin="15"
-                          AutoGenerateColumns="False"
-                          FontFamily="Cascadia Mono"
-                          FontSize="14"
-                          RowHeaderWidth="0"
-                          SelectionMode="Single"
-                          AlternatingRowBackground="#f3f3f3"
-                          BorderBrush="#1a8586"
-                          BorderThickness="2">
+                <!--  Tabla  -->
+                <DataGrid
+                    x:Name="dgProductos"
+                    Grid.Row="1"
+                    Margin="15"
+                    AlternatingRowBackground="#f3f3f3"
+                    AutoGenerateColumns="False"
+                    BorderBrush="#1a8586"
+                    BorderThickness="2"
+                    FontFamily="Cascadia Mono"
+                    FontSize="14"
+                    RowHeaderWidth="0"
+                    SelectionMode="Single">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
-                        <DataGridTextColumn Header="Producto" Binding="{Binding Nombre}" Width="150"/>
-                        <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" Width="120"/>
-                        <DataGridTextColumn Header="Precio" Binding="{Binding Precio}" Width="100"/>
-                        <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="100"/>
+                        <DataGridTextColumn
+                            Width="80"
+                            Binding="{Binding Id}"
+                            Header="ID" />
+                        <DataGridTextColumn
+                            Width="150"
+                            Binding="{Binding Nombre}"
+                            Header="Producto" />
+                        <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding Categoria}"
+                            Header="Categoria" />
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding Precio}"
+                            Header="Precio" />
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding Stock}"
+                            Header="Stock" />
                     </DataGrid.Columns>
 
                 </DataGrid>
 
-                <!-- Botón Volver -->
-                <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <!--  Botones Acciones  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
 
-                    <Button Content="← REGRESAR"
-                            Width="180"
-                            Height="40"
-                            FontFamily="Consolas"
-                            Background="#1a8586"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            Click="btnVolver_Click"/>
+                    <Button
+                        Width="180"
+                        Height="40"
+                        Background="#1a8586"
+                        BorderThickness="0"
+                        Click="btnVolver_Click"
+                        Content="← REGRESAR"
+                        Cursor="Hand"
+                        FontFamily="Consolas"
+                        Foreground="White" />
+                    <Button
+                        Width="180"
+                        Height="40"
+                        Background="#209c68"
+                        BorderThickness="0"
+                        Click="btnAñadir_Click"
+                        Content="➕ Añadir Producto"
+                        Cursor="Hand"
+                        FontFamily="Consolas"
+                        Foreground="White" 
+                        Margin="10"
+                        />
 
+                    <Button
+                        Width="180"
+                        Height="40"
+                    
+                        Background="#f58c96"
+                        BorderThickness="0"
+                        Click="btnBorrar_Click"
+                        Content="🗑 Borrar Producto"
+                        Cursor="Hand"
+                        FontFamily="Consolas"
+                        Foreground="White" />
                 </StackPanel>
+
+
+
+
+
 
             </Grid>
         </Border>

@@ -88,5 +88,42 @@ namespace WpfAppProV2
                 this.DragMove();
             }
         }
+
+        private void btnAñadir_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            RegistrarProducto registrarProducto = new RegistrarProducto(_rolUsuario);
+            registrarProducto.Show();
+        }
+
+        private void btnBorrar_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgProductos.SelectedItem is Producto productoSeleccionado)
+            {
+                // Leer todas las líneas del archivo
+                var lineas = File.ReadAllLines(rutaArchivo);
+                List<string> nuevasLineas = new List<string>();
+
+                foreach (string linea in lineas)
+                {
+                    if (string.IsNullOrWhiteSpace(linea)) continue;
+                    string[] datos = linea.Split(',');
+
+                    // Mantenemos todas las líneas excepto la seleccionada
+                    if (datos.Length == 5 && datos[0] != productoSeleccionado.Id.ToString())
+                    {
+                        nuevasLineas.Add(linea);
+                    }
+                }
+
+                File.WriteAllLines(rutaArchivo, nuevasLineas);
+                MessageBox.Show("Producto eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                CargarProductos(); // Recargamos la tabla
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un producto para borrar.", "Atención", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
     }
 }

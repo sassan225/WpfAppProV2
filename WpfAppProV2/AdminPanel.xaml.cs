@@ -13,9 +13,6 @@ namespace WpfAppProV2
         {
             InitializeComponent();
             _rolUsuario = rolUsuario;
-
-            // Mostrar bienvenida personalizada
-            WelcomeText.Text = "WELCOME, " + _nombreUsuario.ToUpper() + "!";
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

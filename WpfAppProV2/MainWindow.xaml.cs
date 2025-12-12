@@ -20,7 +20,7 @@ namespace WpfAppProV2
                 Directory.CreateDirectory(carpeta);
 
             if (!File.Exists(rutaSuperadmins))
-                File.WriteAllText(rutaSuperadmins, "Super,Admin,N/A,N/A,N/A,1234,SUPERADMIN,super@cosmetique.com", Encoding.UTF8);
+                File.WriteAllText(rutaSuperadmins, "Lukas,LLanos,Medrano,2006,69898528,1234,SUPERADMIN,super@cosmetique.com", Encoding.UTF8);
 
             if (!File.Exists(rutaAdmins))
                 File.WriteAllText(rutaAdmins, string.Empty, Encoding.UTF8);

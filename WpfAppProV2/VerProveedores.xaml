@@ -39,7 +39,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="80"/>
                 </Grid.RowDefinitions>
 
                 <!-- Barra superior -->
@@ -51,7 +51,7 @@
 
                     <TextBlock Text="PROVEEDORES REGISTRADOS"
                                VerticalAlignment="Center"
-                               FontFamily="Consolas"
+                               FontFamily="Cascadia Mono"
                                Margin="12,0,0,0"
                                Foreground="White"
                                FontWeight="Bold"
@@ -67,7 +67,7 @@
                             BorderThickness="0"/>
                 </Grid>
 
-                <!-- Tabla -->
+                <!-- Tabla de proveedores -->
                 <DataGrid x:Name="dgProveedores"
                           Grid.Row="1"
                           Margin="15"
@@ -85,25 +85,19 @@
                         <DataGridTextColumn Header="Nombre" Binding="{Binding NombreProveedor}" Width="200"/>
                         <DataGridTextColumn Header="Contacto" Binding="{Binding ContactoProveedor}" Width="150"/>
                         <DataGridTextColumn Header="Ciudad" Binding="{Binding Ciudad}" Width="200"/>
-
-
-
                     </DataGrid.Columns>
-
                 </DataGrid>
 
-                <!-- Botón Volver -->
-                <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Button Content="← REGRESAR"
-                            Width="180"
-                            Height="40"
-                            FontFamily="Consolas"
-                            Background="#1a8586"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            Click="btnVolver_Click"/>
+                <!-- Botones Acciones con emojis -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
+                    <Button Width="150" Height="40" Background="#209c68" BorderThickness="0" Cursor="Hand" FontFamily="Segoe UI Emoji"
+                            Click="btnAñadir_Click" Content="➕ Añadir Proveedor" Foreground="White"/>
+                    <Button Width="150" Height="40" Background="#f58c96" BorderThickness="0" Cursor="Hand" FontFamily="Segoe UI Emoji"
+                            Click="btnBorrar_Click" Content="🗑 Borrar Proveedor" Foreground="White" Margin="10,0,10,0"/>
+                    <Button Width="150" Height="40" Background="#1a8586" BorderThickness="0" Cursor="Hand" FontFamily="Segoe UI Emoji"
+                            Click="btnVolver_Click" Content="← Regresar" Foreground="White"/>
                 </StackPanel>
+
             </Grid>
         </Border>
     </Border>
