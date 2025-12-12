@@ -23,7 +23,7 @@
             CornerRadius="20"
             Opacity="0.8">
             <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,1">
                     <GradientStop Offset="0" Color="#1a8586" />
                     <GradientStop Offset="0.3" Color="#B8C97A" />
                     <GradientStop Offset="0.7" Color="#D7E2B8" />
@@ -32,7 +32,7 @@
             </Border.BorderBrush>
 
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Offset="0" Color="#eaeace" />
                     <GradientStop Offset="0.3" Color="#c5cf8a" />
                     <GradientStop Offset="0.7" Color="#f3f3f3" />
@@ -77,12 +77,14 @@
                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
 
                     <TextBlock
+                        x:Name="WelcomeText"
                         Margin="0,0,0,35"
                         HorizontalAlignment="Center"
                         FontSize="38"
                         FontWeight="Bold"
                         Foreground="#1a8586"
                         Text="WELCOME!" />
+
 
                     <StackPanel
                         Width="350"

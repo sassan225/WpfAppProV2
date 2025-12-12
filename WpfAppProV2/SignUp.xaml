@@ -18,259 +18,150 @@
 
     <Border CornerRadius="20">
         <Border.Background>
-            <ImageBrush ImageSource="/sources/back-image.jfif" />
+            <ImageBrush ImageSource="/sources/back-image.jfif"/>
         </Border.Background>
 
-        <!--  NUEVA PALETA VERDE EN EL BORDE  -->
-        <Border
-            BorderThickness="10"
-            CornerRadius="20"
-            Opacity="0.8">
-
+        <!-- BORDE VERDE -->
+        <Border BorderThickness="10" CornerRadius="20" Opacity="0.8" Margin="0,0,0,-58">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="#1a8586" />
-                    <GradientStop Offset="0.3" Color="#B8C97A" />
-                    <GradientStop Offset="0.7" Color="#D7E2B8" />
-                    <GradientStop Offset="1" Color="#1a8586" />
+                    <GradientStop Offset="0" Color="#1a8586"/>
+                    <GradientStop Offset="0.3" Color="#B8C97A"/>
+                    <GradientStop Offset="0.7" Color="#D7E2B8"/>
+                    <GradientStop Offset="1" Color="#1a8586"/>
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="#eaeace" />
-                    <GradientStop Offset="0.3" Color="#c5cf8a" />
-                    <GradientStop Offset="0.7" Color="#f3f3f3" />
-                    <GradientStop Offset="1" Color="#c5cf8a" />
+                    <GradientStop Offset="0" Color="#eaeace"/>
+                    <GradientStop Offset="0.3" Color="#c5cf8a"/>
+                    <GradientStop Offset="0.7" Color="#f3f3f3"/>
+                    <GradientStop Offset="1" Color="#c5cf8a"/>
                 </LinearGradientBrush>
             </Border.Background>
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!--  TOPBAR  -->
+                <!-- TOPBAR -->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="25" />
-                        <ColumnDefinition Width="25" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button
-                        x:Name="btnMinimizar"
-                        Grid.Column="1"
-                        Background="#1a8586"
-                        Click="btnMinimizar_Click"
-                        Content="-"
-                        Foreground="White" />
+                    <Button x:Name="btnMinimizar" Grid.Column="1" Background="#1a8586"
+                            Click="btnMinimizar_Click" Content="-" Foreground="White"/>
 
-                    <Button
-                        x:Name="btnCerrar"
-                        Grid.Column="2"
-                        Background="#f58c96"
-                        Click="btnCerrar_Click"
-                        Content="X"
-                        Cursor="Hand"
-                        Foreground="White" />
+                    <Button x:Name="btnCerrar" Grid.Column="2" Background="#f58c96"
+                            Click="btnCerrar_Click" Content="X" Cursor="Hand" Foreground="White"/>
 
-                    <TextBlock
-                        Grid.Column="0"
-                        Margin="10,0,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontFamily="Cascadia Mono"
-                        Foreground="#1a8586"
-                        Text="SIGN UP V.1.0.0" />
+                    <TextBlock Grid.Column="0" Margin="10,0,0,0"
+                               HorizontalAlignment="Left" VerticalAlignment="Center"
+                               FontFamily="Cascadia Mono" Foreground="#1a8586"
+                               Text="SIGN UP V.1.0.0"/>
                 </Grid>
 
-                <!--  CUERPO  -->
+                <!-- CUERPO -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!--  CÍRCULO IZQUIERDO  -->
-                    <Border
-                        Grid.Column="0"
-                        Margin="10,10,27,10"
-                        CornerRadius="100"
-                        Opacity="0.8">
+                    <!-- CÍRCULO -->
+                    <Border Grid.Column="0" Margin="10,10,27,10" CornerRadius="100" Opacity="0.8">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Offset="0" Color="#eaeace" />
-                                <GradientStop Offset="0.4" Color="#c5cf8a" />
-                                <GradientStop Offset="1" Color="#1a8586" />
+                                <GradientStop Offset="0" Color="#eaeace"/>
+                                <GradientStop Offset="0.4" Color="#c5cf8a"/>
+                                <GradientStop Offset="1" Color="#1a8586"/>
                             </LinearGradientBrush>
                         </Border.Background>
                     </Border>
 
-                    <!--  WELCOME  -->
-                    <TextBlock
-                        Width="140"
-                        Height="35"
-                        Margin="0,288,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        FontFamily="Cascadia Mono"
-                        FontSize="30"
-                        Foreground="#1a8586"
-                        Text="WELCOME!" />
+                    <TextBlock Width="140" Height="35" Margin="0,288,0,0"
+                               HorizontalAlignment="Center" VerticalAlignment="Top"
+                               FontFamily="Cascadia Mono" FontSize="30"
+                               Foreground="#1a8586" Text="WELCOME!"/>
 
-                    <Image
-                        Grid.Column="0"
-                        Margin="74,-3,91,123"
-                        Source="/sources/man-icon2.png" />
+                    <Image Grid.Column="0" Margin="74,-3,88,109"
+                           Source="/sources/man-icon2.png"/>
 
-                    <Button
-                        x:Name="btnBack"
-                        Margin="146,345,146,134"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Background="#c5cf8a"
-                        Click="btnBack_Click"
-                        Content="← back"
-                        FontSize="15"
-                        Foreground="Black" />
+                    <Button x:Name="btnBack" Margin="146,345,146,187"
+                            Background="#c5cf8a" Click="btnBack_Click"
+                            Content="← back" FontSize="15" Foreground="Black"/>
 
-                    <!--  FIELDS  -->
-                    <StackPanel
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Height="522"
-                        Margin="0,10,20,0"
-                        VerticalAlignment="Top">
+                    <!-- CAMPOS -->
+                    <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2"
+                                  VerticalScrollBarVisibility="Auto" Margin="0,10,20,0">
+                        <StackPanel VerticalAlignment="Top">
 
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            FontFamily="Cascadia Mono"
-                            FontSize="30"
-                            FontWeight="UltraBold"
-                            Foreground="#1a8586"
-                            Text="SIGN UP" />
+                            <TextBlock HorizontalAlignment="Center"
+                                       FontFamily="Cascadia Mono" FontSize="30"
+                                       FontWeight="UltraBold" Foreground="#1a8586"
+                                       Text="SIGN UP"/>
 
-                        <!--  CAMPOS  -->
-                        <!--  CAMPOS  -->
-                        <TextBlock
-                            FontSize="22"
-                            Foreground="#4d374d"
-                            Text="Name:" />
-                        <TextBox
-                            x:Name="txtName"
-                            Background="Transparent"
-                            BorderBrush="#1a8586"
-                            FontSize="22"
-                            FontWeight="ExtraBlack"
-                            Foreground="Black" />
+                            <!-- CAMPOS -->
+                            <TextBlock FontSize="22" Foreground="#4d374d" Text="Name:"/>
+                            <TextBox x:Name="txtName" Background="Transparent"
+                                     BorderBrush="#1a8586" FontSize="22"
+                                     FontWeight="ExtraBlack" Foreground="Black"/>
 
-                        <TextBlock
-                            Margin="0,20,0,0"
-                            FontSize="22"
-                            Foreground="#4d374d"
-                            Text="Last Name (Paternal):" />
-                        <TextBox
-                            x:Name="txtApp"
-                            Background="Transparent"
-                            BorderBrush="#1a8586"
-                            FontSize="22"
-                            FontWeight="ExtraBlack"
-                            Foreground="Black" />
+                            <TextBlock Margin="0,15,0,0" FontSize="22" Foreground="#4d374d"
+                                       Text="Last Name (Paternal):"/>
+                            <TextBox x:Name="txtApp" Background="Transparent"
+                                     BorderBrush="#1a8586" FontSize="22"
+                                     FontWeight="ExtraBlack" Foreground="Black"/>
 
-                        <TextBlock
-                            Margin="0,20,0,0"
-                            FontSize="22"
-                            Foreground="#4d374d"
-                            Text="Last Name (Maternal):" />
-                        <TextBox
-                            x:Name="txtApm"
-                            Background="Transparent"
-                            BorderBrush="#1a8586"
-                            FontSize="22"
-                            FontWeight="ExtraBlack"
-                            Foreground="Black" />
+                            <TextBlock Margin="0,15,0,0" FontSize="22" Foreground="#4d374d"
+                                       Text="Last Name (Maternal):"/>
+                            <TextBox x:Name="txtApm" Background="Transparent"
+                                     BorderBrush="#1a8586" FontSize="22"
+                                     FontWeight="ExtraBlack" Foreground="Black"/>
 
-                        <TextBlock
-                            Margin="0,20,0,0"
-                            FontSize="22"
-                            Foreground="#4d374d"
-                            Text="Phone:" />
-                        <TextBox
-                            x:Name="txtPhone"
-                            Background="Transparent"
-                            BorderBrush="#1a8586"
-                            FontSize="22"
-                            FontWeight="ExtraBlack"
-                            Foreground="Black" />
+                            <TextBlock Margin="0,15,0,0" FontSize="22" Foreground="#4d374d"
+                                       Text="Phone:"/>
+                            <TextBox x:Name="txtPhone" Background="Transparent"
+                                     BorderBrush="#1a8586" FontSize="22"
+                                     FontWeight="ExtraBlack" Foreground="Black"/>
 
-                        <TextBlock
-                            Margin="0,20,0,0"
-                            FontSize="22"
-                            Foreground="#4d374d"
-                            Text="Year of Birth:" />
-                        <TextBox
-                            x:Name="txtYear"
-                            Background="Transparent"
-                            BorderBrush="#1a8586"
-                            FontSize="22"
-                            FontWeight="ExtraBlack"
-                            Foreground="Black" />
+                            <TextBlock Margin="0,15,0,0" FontSize="22" Foreground="#4d374d"
+                                       Text="Year of Birth:"/>
+                            <TextBox x:Name="txtYear" Background="Transparent"
+                                     BorderBrush="#1a8586" FontSize="22"
+                                     FontWeight="ExtraBlack" Foreground="Black"/>
 
-                        <TextBlock
-                            Margin="0,20,0,0"
-                            FontSize="22"
-                            Foreground="#4d374d"
-                            Text="Password:" />
-                        <PasswordBox
-                            x:Name="txtpwd"
-                            Background="Transparent"
-                            BorderBrush="#1a8586"
-                            FontSize="22"
-                            FontWeight="ExtraBlack"
-                            Foreground="Black" />
+                            <TextBlock Margin="0,15,0,0" FontSize="22" Foreground="#4d374d"
+                                       Text="Password:"/>
+                            <PasswordBox x:Name="txtpwd" Background="Transparent"
+                                         BorderBrush="#1a8586" FontSize="22"
+                                         FontWeight="ExtraBlack" Foreground="Black"/>
 
-                    </StackPanel>
+                            <!-- REGISTRATION CODE -->
+                            <TextBlock Margin="0,15,0,0" FontSize="22"
+                                       Foreground="#4d374d" Text="Registration Code:"/>
+                            <TextBox x:Name="txtRegCode" Background="Transparent"
+                                     BorderBrush="#1a8586" FontSize="22"
+                                     FontWeight="ExtraBlack" Foreground="Black"
+                                     ToolTip="Ingrese el código proporcionado por el SuperAdmin"/>
 
-                    <!--  BOTÓN SIGN UP  -->
-                    <Button
-                        x:Name="btnSignUp"
-                        Background="#209c68"
-                        Click="btnSignUp_Click"
-                        Cursor="Hand" Margin="148,400,148,75">
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text="S" />
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text="I" />
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text="G" />
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text="N" />
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text=" " />
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text="U" />
-                            <TextBlock
-                                FontFamily="Cascadia Mono"
-                                Foreground="White"
-                                Text="P" />
                         </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- BOTÓN SIGN UP -->
+                    <Button x:Name="btnSignUp" Background="#209c68"
+                            Margin="141,404,140,108" Click="btnSignUp_Click"
+                            Cursor="Hand">
+                        <TextBlock FontFamily="Cascadia Mono" Foreground="White"
+                                   Text="SIGN UP" FontSize="18" FontWeight="Bold"/>
                     </Button>
 
                 </Grid>

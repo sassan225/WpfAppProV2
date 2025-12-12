@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 
 namespace WpfAppProV2
 {
@@ -19,32 +20,37 @@ namespace WpfAppProV2
 
         private void CargarProductos()
         {
-            var lista = new List<Producto>();
+            List<Producto> lista = new List<Producto>();
 
-            if (!File.Exists(rutaArchivo))
+            if (File.Exists(rutaArchivo))
             {
-                dgProductos.ItemsSource = lista;
-                return;
-            }
+                string[] lineas = File.ReadAllLines(rutaArchivo);
 
-            string[] lineas = File.ReadAllLines(rutaArchivo);
-
-            foreach (string linea in lineas)
-            {
-                if (!string.IsNullOrWhiteSpace(linea))
+                foreach (string linea in lineas)
                 {
-                    string[] datos = linea.Split(',');
-
-                    if (datos.Length == 5 &&
-                        int.TryParse(datos[0], out int id) &&
-                        decimal.TryParse(datos[3], out decimal precio) &&
-                        int.TryParse(datos[4], out int stock))
+                    if (!string.IsNullOrWhiteSpace(linea))
                     {
-                        lista.Add(new Producto(id, datos[1], datos[2], precio, stock));
+                        string[] datos = linea.Split(',');
+
+                        if (datos.Length == 5)
+                        {
+                            int id;
+                            decimal precio;
+                            int stock;
+
+                            if (int.TryParse(datos[0], out id) &&
+                                decimal.TryParse(datos[3], out precio) &&
+                                int.TryParse(datos[4], out stock))
+                            {
+                                Producto p = new Producto(id, datos[1], datos[2], precio, stock);
+                                lista.Add(p);
+                            }
+                        }
                     }
                 }
             }
 
+            dgProductos.ItemsSource = null;
             dgProductos.ItemsSource = lista;
         }
 
@@ -54,15 +60,15 @@ namespace WpfAppProV2
 
             if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
             {
-                ventanaDestino = new PanelSuperAdmin();
+                ventanaDestino = new PanelSuperAdmin(_rolUsuario);
             }
-            else if (_rolUsuario.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            else if (_rolUsuario.Equals("admin", StringComparison.OrdinalIgnoreCase))
             {
-                ventanaDestino = new AdminPanel();
+                ventanaDestino = new AdminPanel(_rolUsuario);
             }
             else
             {
-                MessageBox.Show("Origen desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Rol desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -75,10 +81,12 @@ namespace WpfAppProV2
             Application.Current.Shutdown();
         }
 
-        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-                DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
     }
 }

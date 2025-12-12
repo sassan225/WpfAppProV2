@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -8,20 +9,14 @@ namespace WpfAppProV2
 {
     public partial class VerAdmins : Window
     {
-        private string carpetaBase = @"C:\cosmetiqueSoftware";
-        private string rutaArchivo;
+        private readonly string rutaArchivo = @"C:\cosmetiqueSoftware\loginsPro.txt";
+        private readonly string _rolUsuario;
         private List<Admin> listaAdmins;
 
-        public VerAdmins()
+        public VerAdmins(string rolUsuario)
         {
             InitializeComponent();
-
-            // Crear carpeta si no existe
-            if (!Directory.Exists(carpetaBase))
-                Directory.CreateDirectory(carpetaBase);
-
-            rutaArchivo = Path.Combine(carpetaBase, "admins.txt");
-
+            _rolUsuario = rolUsuario;
             CargarAdmins();
         }
 
@@ -36,14 +31,17 @@ namespace WpfAppProV2
                 foreach (string linea in lineas)
                 {
                     string[] datos = linea.Split(',');
-
-                    if (datos.Length == 3)
+                    if (datos.Length >= 8 && datos[6].Trim().ToUpper() == "ADMIN")
                     {
+                        string nombreCompleto = $"{datos[0]} {datos[1]} {datos[2]}";
+                        string correo = datos[7].Trim();
+                        string contrasenia = datos[5].Trim();
+
                         listaAdmins.Add(new Admin
                         {
-                            IdAdmin = int.Parse(datos[0]),
-                            Nombre = datos[1],
-                            Correo = datos[2]
+                            Nombre = nombreCompleto,
+                            Correo = correo,
+                            Contraseña = contrasenia
                         });
                     }
                 }
@@ -55,17 +53,23 @@ namespace WpfAppProV2
 
         private void btnAñadir_Click(object sender, RoutedEventArgs e)
         {
-            RegistrarAdmin registrarAdmin = new RegistrarAdmin();
-            registrarAdmin.ShowDialog(); // abrir como modal
-            CargarAdmins(); // recargar lista al volver
+            RegistrarAdmin registrarAdmin = new RegistrarAdmin(_rolUsuario); // pasamos rol
+            registrarAdmin.ShowDialog();
+            CargarAdmins();
         }
 
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dgAdmins.SelectedItem is Admin adminSeleccionado)
             {
-                listaAdmins.Remove(adminSeleccionado);
-                GuardarAdmins();
+                var lineas = File.ReadAllLines(rutaArchivo).ToList();
+                lineas = lineas.Where(l =>
+                {
+                    var datos = l.Split(',');
+                    return !(datos.Length >= 8 && datos[7].Trim() == adminSeleccionado.Correo);
+                }).ToList();
+
+                File.WriteAllLines(rutaArchivo, lineas);
                 CargarAdmins();
             }
             else
@@ -88,16 +92,6 @@ namespace WpfAppProV2
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
-        }
-
-        private void GuardarAdmins()
-        {
-            List<string> lineas = new List<string>();
-            foreach (var admin in listaAdmins)
-            {
-                lineas.Add($"{admin.IdAdmin},{admin.Nombre},{admin.Correo}");
-            }
-            File.WriteAllLines(rutaArchivo, lineas);
         }
     }
 }

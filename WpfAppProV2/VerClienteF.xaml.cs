@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,101 +8,88 @@ namespace WpfAppProV2
 {
     public partial class VerClienteF : Window
     {
-        private readonly string _rolUsuario; // rol que viene del panel
-        private readonly string carpetaBase = @"C:\cosmetiqueSoftware";
-        private readonly string rutaArchivo;
-        private List<ClienteF> listaClientes = new List<ClienteF>();
+        private readonly string _rolUsuario;
+        private readonly string _carpetaBase = @"C:\cosmetiqueSoftware";
+        private readonly string _rutaArchivo;
+        private List<ClienteF> _listaClientes = new List<ClienteF>();
 
         public VerClienteF(string rolUsuario)
         {
             InitializeComponent();
             _rolUsuario = rolUsuario;
 
-            if (!Directory.Exists(carpetaBase))
-                Directory.CreateDirectory(carpetaBase);
+            if (!Directory.Exists(_carpetaBase))
+                Directory.CreateDirectory(_carpetaBase);
 
-            rutaArchivo = Path.Combine(carpetaBase, "clientesF.txt");
-
+            _rutaArchivo = Path.Combine(_carpetaBase, "clientesF.txt");
             CargarClientes();
         }
 
         private void CargarClientes()
         {
-            listaClientes.Clear();
+            _listaClientes.Clear();
+            if (!File.Exists(_rutaArchivo)) return;
 
-            if (File.Exists(rutaArchivo))
+            foreach (var linea in File.ReadAllLines(_rutaArchivo))
             {
-                string[] lineas = File.ReadAllLines(rutaArchivo);
-
-                foreach (var linea in lineas)
+                var datos = linea.Split(',');
+                if (datos.Length == 3)
                 {
-                    string[] datos = linea.Split(',');
-
-                    if (datos.Length == 3) // solo Id, Nombre, Correo
+                    _listaClientes.Add(new ClienteF
                     {
-                        listaClientes.Add(new ClienteF
-                        {
-                            IdCliente = int.Parse(datos[0]),
-                            Nombre = datos[1],
-                            Correo = datos[2]
-                        });
-                    }
+                        IdCliente = int.Parse(datos[0]),
+                        Nombre = datos[1],
+                        Correo = datos[2]
+                    });
                 }
             }
 
             dgClientes.ItemsSource = null;
-            dgClientes.ItemsSource = listaClientes;
-        }
-
-        private void btnVolver_Click(object sender, RoutedEventArgs e)
-        {
-            Window ventanaDestino;
-
-            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
-                ventanaDestino = new PanelSuperAdmin();
-            else
-                ventanaDestino = new AdminPanel();
-
-            ventanaDestino.Show();
-            this.Close();
+            dgClientes.ItemsSource = _listaClientes;
         }
 
         private void btnAñadir_Click(object sender, RoutedEventArgs e)
         {
-            RegistrarClienteF registrar = new RegistrarClienteF(_rolUsuario);
-            registrar.Show();
-            this.Close();
+            new RegistrarClienteF(_rolUsuario).Show();
+            this.Hide();
         }
 
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dgClientes.SelectedItem is ClienteF seleccionado)
             {
-                var result = MessageBox.Show($"¿Deseas borrar a {seleccionado.Nombre}?", "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
+                if (MessageBox.Show($"¿Deseas borrar a {seleccionado.Nombre}?", "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    listaClientes.Remove(seleccionado);
+                    _listaClientes.Remove(seleccionado);
                     GuardarClientes();
                     CargarClientes();
                 }
             }
             else
             {
-                MessageBox.Show("Selecciona un cliente primero.");
+                MessageBox.Show("Selecciona un cliente primero.", "Atención", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
         private void GuardarClientes()
         {
-            List<string> lineas = new List<string>();
-
-            foreach (var c in listaClientes)
-            {
+            var lineas = new List<string>();
+            foreach (var c in _listaClientes)
                 lineas.Add($"{c.IdCliente},{c.Nombre},{c.Correo}");
-            }
 
-            File.WriteAllLines(rutaArchivo, lineas);
+            File.WriteAllLines(_rutaArchivo, lineas);
+        }
+
+        private void btnVolver_Click(object sender, RoutedEventArgs e)
+        {
+            Window ventanaDestino;
+            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
+                ventanaDestino = new PanelSuperAdmin(_rolUsuario);
+            else
+                ventanaDestino = new AdminPanel(_rolUsuario);
+
+            ventanaDestino.Show();
+            this.Close();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

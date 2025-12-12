@@ -3,95 +3,94 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace WpfAppProV2
 {
     public partial class SignUp : Window
     {
-        // Ruta centralizada
-        private readonly string rutaArchLogin = @"C:\cosmetiqueSoftware\loginsPro.txt";
+        private readonly string rutaAdmins = @"C:\cosmetiqueSoftware\loginsPro.txt";
+        private readonly string rutaCodigos = @"C:\cosmetiqueSoftware\adminCodes.txt";
 
         public SignUp()
         {
             InitializeComponent();
-
-            // Crear carpeta y archivo si no existen
-            string carpeta = Path.GetDirectoryName(rutaArchLogin);
-            if (!Directory.Exists(carpeta))
-                Directory.CreateDirectory(carpeta);
-
-            if (!File.Exists(rutaArchLogin))
-                File.WriteAllText(rutaArchLogin, string.Empty, Encoding.UTF8);
+            string carpeta = Path.GetDirectoryName(rutaAdmins);
+            if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
+            if (!File.Exists(rutaAdmins)) File.WriteAllText(rutaAdmins, string.Empty, Encoding.UTF8);
+            if (!File.Exists(rutaCodigos)) File.WriteAllText(rutaCodigos, string.Empty, Encoding.UTF8);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
-        private void btnMinimizar_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void btnCerrar_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
+        private void btnMinimizar_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+        private void btnCerrar_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
             string nombre = txtName.Text.Trim();
-            string apellido = txtApp.Text.Trim();
+            string apellidoP = txtApp.Text.Trim();
+            string apellidoM = txtApm.Text.Trim();
+            string telefono = txtPhone.Text.Trim();
+            string year = txtYear.Text.Trim();
             string contrasenia = txtpwd.Password.Trim();
+            string regCode = txtRegCode.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido) || string.IsNullOrWhiteSpace(contrasenia))
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellidoP) ||
+                string.IsNullOrWhiteSpace(apellidoM) || string.IsNullOrWhiteSpace(telefono) ||
+                string.IsNullOrWhiteSpace(year) || string.IsNullOrWhiteSpace(contrasenia) ||
+                string.IsNullOrWhiteSpace(regCode))
             {
-                MessageBox.Show("DEBES LLENAR TODOS LOS CAMPOS!!");
-                return;
+                MessageBox.Show("Todos los campos son obligatorios."); return;
             }
 
-            // Validar solo letras para nombre y apellido
-
-
-            string letterPattern = @"^[a-zA-Z]+$";
-            if (!Regex.IsMatch(nombre, letterPattern) || !Regex.IsMatch(apellido, letterPattern))
+            if (!Regex.IsMatch(nombre + apellidoP + apellidoM, @"^[a-zA-Z]+$"))
             {
-                MessageBox.Show("Nombre y apellido solo deben contener letras.");
-                return;
+                MessageBox.Show("Nombre y apellidos solo deben contener letras."); return;
             }
 
-            
-            string passPattern = @"(?=.*[a-z])(?=.*[A-Z])(?=.*[\d]).+$";
-            if (!Regex.IsMatch(contrasenia, passPattern))
+            if (!Regex.IsMatch(telefono, @"^\d+$"))
             {
-                MessageBox.Show("La contraseña debe tener al menos una mayúscula, minúscula y un número.");
-                return;
+                MessageBox.Show("El teléfono solo debe contener números."); return;
             }
 
-         
-            string correo = nombre.ToLower() + "." + apellido.ToLower() + "@cosmetique.com";
+            if (!int.TryParse(year, out int anioNacimiento) || anioNacimiento < 1940 || anioNacimiento > DateTime.Now.Year - 10)
+            {
+                MessageBox.Show("Año de nacimiento inválido."); return;
+            }
 
-         
-            string datos = string.Join(",", nombre, correo, "ADMIN", contrasenia) + Environment.NewLine;
-            File.AppendAllText(rutaArchLogin, datos, Encoding.UTF8);
+            if (!Regex.IsMatch(contrasenia, @"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"))
+            {
+                MessageBox.Show("La contraseña debe contener mayúscula, minúscula y número."); return;
+            }
 
-            MessageBox.Show("Admin registrado correctamente!!\nCorreo generado: " + correo);
+            // Validar código
+            string[] codigos = File.ReadAllLines(rutaCodigos);
+            if (!Array.Exists(codigos, c => c == regCode))
+            {
+                MessageBox.Show("Código de registro inválido o expirado."); return;
+            }
 
-            // Volver al login
-            MainWindow login = new MainWindow();
-            login.Show();
-            this.Close();
+            string correo = $"{nombre.ToLower()}.{apellidoP.ToLower()}@cosmetique.com";
+
+            string datos = string.Join(",", nombre, apellidoP, apellidoM, telefono, anioNacimiento, contrasenia, "ADMIN", correo);
+            File.AppendAllText(rutaAdmins, datos + Environment.NewLine, Encoding.UTF8);
+
+            // Eliminar código usado
+            File.WriteAllLines(rutaCodigos, Array.FindAll(codigos, c => c != regCode));
+
+            MessageBox.Show($"Admin registrado correctamente.\nCorreo generado: {correo}");
+            new MainWindow().Show();
+            Close();
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            this.Close();
+            new MainWindow().Show();
+            Close();
         }
     }
 }

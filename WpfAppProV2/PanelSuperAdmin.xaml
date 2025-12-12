@@ -4,135 +4,313 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Panel Super Admin"
     Width="950"
-    Height="600"
+    Height="700"
     AllowsTransparency="True"
     Background="Transparent"
-    WindowStartupLocation="CenterScreen"
+    MouseDown="Window_MouseDown"
     ResizeMode="NoResize"
-    WindowStyle="None"
-    MouseDown="Window_MouseDown"    
-    >
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
 
+    <!--  Contenedor principal  -->
     <Border>
         <Border.Background>
-            <ImageBrush ImageSource="/sources/FondoAdmin.jpg"/>
+            <ImageBrush ImageSource="/sources/fondoAdmin3.jpg" />
         </Border.Background>
+        <Border BorderThickness="2" CornerRadius="20">
+            <Border.Background>
 
-    <Border CornerRadius="20" BorderThickness="2" BorderBrush="#1a8586">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-            <!-- Barra superior -->
-            <Grid Background="#1a8586">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" />
+            </Border.Background>
 
-                <TextBlock Text="SUPER ADMIN PANEL"
-                           VerticalAlignment="Center"
-                           Margin="12,0,0,0"
-                           FontFamily="Consolas"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Foreground="White"/>
-                <Button Grid.Column="1"
-                        Content="X"
+
+
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="#1a8586" />
+                    <GradientStop Offset="0.3" Color="#B8C97A" />
+                    <GradientStop Offset="0.7" Color="#D7E2B8" />
+                    <GradientStop Offset="1" Color="#1a8586" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  Barra superior  -->
+                <Grid Background="#121212">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Consolas"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="#f0f0f0"
+                        Text="SUPER ADMIN PANEL" />
+                    <Button
+                        Grid.Column="1"
+                        Height="35"
+                        VerticalAlignment="Top"
                         Background="#e94560"
                         BorderThickness="0"
-                        Foreground="White"
-                        FontWeight="Bold"
+                        Click="BtnClose_Click"
+                        Content="X"
                         Cursor="Hand"
-                        Click="btnClose_Click" Height="35" VerticalAlignment="Top"/>
-            </Grid>
+                        FontWeight="Bold"
+                        Foreground="White" />
+                </Grid>
 
-            <!-- Contenido central -->
-            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <!--  Contenido central  -->
+                <StackPanel
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        Margin="0,0,0,40"
+                        HorizontalAlignment="Center"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="#f0f0f0"
+                        Text="BIENVENIDO GERENTE!" />
 
-                <TextBlock 
-                           Foreground="White"   
-                           FontSize="32" 
-                           FontWeight="Bold" 
-                       
-                           HorizontalAlignment="Center"><Run Language="es-bo" Text=" BIENVENIDO GERENTE!"/></TextBlock>
+                    <StackPanel
+                        Width="400"
+                        HorizontalAlignment="Center"
+                        Orientation="Vertical">
 
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="400">
+                        <Button
+                            x:Name="btnRegistrarAdmin"
+                            Height="50"
+                            Background="#0f1b2d"
+                            BorderThickness="0"
+                            Click="BtnRegistrarAdmin_Click"
+                            Content="👤 Registrar Admin"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#1a2e4b" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                    <!-- Botones grandes estilo pro -->
-                    <Button x:Name="btnAdmins" Content="👤 Administradores" Height="60" FontSize="20" 
-                            Background="#162447" Foreground="White" BorderThickness="0" Cursor="Hand"
-                            Click="BtnAdmins_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="0.85"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Opacity" Value="1"/>
-                                        <Setter Property="Background" Value="#1f4068"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                        <Button
+                            x:Name="btnVerAdmins"
+                            Height="50"
+                            Background="#162447"
+                            BorderThickness="0"
+                            Click="BtnVerAdmins_Click"
+                            Content="👥 Ver Admins"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#1f4068" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                    <Button x:Name="btnProveedores" Content="🛒 Proveedores" Height="60" FontSize="20"
-                            Background="#209c68" Foreground="White" BorderThickness="0" Cursor="Hand"
-                            Click="BtnProveedores_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="0.85"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Opacity" Value="1"/>
-                                        <Setter Property="Background" Value="#28b485"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                        <Button
+                            x:Name="btnRegistrarProveedor"
+                            Height="50"
+                            Background="#14573c"
+                            BorderThickness="0"
+                            Click="BtnRegistrarProveedor_Click"
+                            Content="🛒 Registrar Proveedor"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#1f7c56" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                    <Button x:Name="btnInventario" Content="📦 Inventario" Height="60" FontSize="20"
-                            Background="#6fa8dc" Foreground="White" BorderThickness="0" Cursor="Hand"
-                            Click="BtnInventario_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="0.85"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Opacity" Value="1"/>
-                                        <Setter Property="Background" Value="#82c0f2"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                        <Button
+                            x:Name="btnVerProveedores"
+                            Height="50"
+                            Background="#14573c"
+                            BorderThickness="0"
+                            Click="BtnVerProveedores_Click"
+                            Content="👤 Ver Proveedores"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#1f7c56" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                    <Button x:Name="btnClientes" Content="🏆 Clientes Frecuentes" Height="60" FontSize="20"
-                            Background="#f2b705" Foreground="White" BorderThickness="0" Cursor="Hand" Click="btnClientes_Click_1"
-                            >
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="0.85"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Opacity" Value="1"/>
-                                        <Setter Property="Background" Value="#ffcf33"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                        <Button
+                            x:Name="btnRegistrarProducto"
+                            Height="50"
+                            Background="#3b5c7e"
+                            BorderThickness="0"
+                            Click="BtnRegistrarProducto_Click"
+                            Content="📦 Registrar Producto"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#5a7fb0" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                    <Button x:Name="btnCerrarSesion" Content="⛔ Cerrar Sesión" Height="60" FontSize="20"
-                            Background="#e94560" Foreground="White" BorderThickness="0" Cursor="Hand"
-                            Click="BtnLogout_Click"/>
+                        <Button
+                            x:Name="btnVerProductos"
+                            Height="50"
+                            Background="#3b5c7e"
+                            BorderThickness="0"
+                            Click="BtnVerProductos_Click"
+                            Content="📦 Ver Productos"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#5a7fb0" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button
+                            x:Name="btnRegistrarCliente"
+                            Height="50"
+                            Background="#b58e03"
+                            BorderThickness="0"
+                            Click="BtnRegistrarCliente_Click"
+                            Content="🏆 Registrar Cliente Frecuente"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#d1a824" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button
+                            x:Name="btnVerClientes"
+                            Height="50"
+                            Background="#b58e03"
+                            BorderThickness="0"
+                            Click="BtnVerClientes_Click"
+                            Content="🏆 Ver Clientes Frecuentes"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#d1a824" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button
+                            x:Name="btnGenerarCodigoAdmin"
+                            Height="50"
+                            Background="#0a0f1a"
+                            BorderThickness="0"
+                            Click="BtnGenerarCodigoAdmin_Click"
+                            Content="🔑 Generar Código Admin"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Opacity" Value="0.85" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="#1a2e4b" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!--  Cerrar sesión  -->
+                        <Button
+                            x:Name="btnCerrarSesion"
+                            Height="50"
+                            Margin="0,15,0,0"
+                            Background="#e94560"
+                            BorderThickness="0"
+                            Click="BtnLogout_Click"
+                            Content="⛔ Cerrar Sesión"
+                            Cursor="Hand"
+                            FontSize="18"
+                            Foreground="White" />
+
+                    </StackPanel>
+
                 </StackPanel>
-
-            </StackPanel>
-        </Grid>
-    </Border>
+            </Grid>
+        </Border>
     </Border>
 </Window>

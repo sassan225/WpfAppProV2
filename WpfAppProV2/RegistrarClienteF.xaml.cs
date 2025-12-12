@@ -7,61 +7,21 @@ namespace WpfAppProV2
 {
     public partial class RegistrarClienteF : Window
     {
-        private readonly string rutaCarpeta = @"C:\cosmetiqueSoftware";
-        private readonly string rutaArchivo;
+        private readonly string _rutaArchivo;
+        private readonly string _rolUsuario;
+        private readonly string _carpetaBase = @"C:\cosmetiqueSoftware";
 
-        private readonly string origen;   // MISMA LÓGICA QUE LOS OTROS FORMULARIOS
-
-        public RegistrarClienteF(string origen = "admin")
+        public RegistrarClienteF(string rolUsuario)
         {
             InitializeComponent();
+            _rolUsuario = rolUsuario;
 
-            this.origen = origen;
+            if (!Directory.Exists(_carpetaBase))
+                Directory.CreateDirectory(_carpetaBase);
 
-            if (!Directory.Exists(rutaCarpeta))
-                Directory.CreateDirectory(rutaCarpeta);
-
-            rutaArchivo = Path.Combine(rutaCarpeta, "clientesF.txt");
-
-            if (!File.Exists(rutaArchivo))
-                File.WriteAllText(rutaArchivo, string.Empty);
-        }
-
-        private void btnVolver_Click(object sender, RoutedEventArgs e)
-        {
-            Window ventanaDestino;
-
-            if (origen.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
-            {
-                ventanaDestino = new PanelSuperAdmin();
-            }
-            else if (origen.Equals("admin", StringComparison.OrdinalIgnoreCase))
-            {
-                ventanaDestino = new AdminPanel();
-            }
-            else
-            {
-                MessageBox.Show(
-                    "Origen desconocido.",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-                return;
-            }
-
-            ventanaDestino.Show();
-            this.Close();
-        }
-
-        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void BtnClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
+            _rutaArchivo = Path.Combine(_carpetaBase, "clientesF.txt");
+            if (!File.Exists(_rutaArchivo))
+                File.WriteAllText(_rutaArchivo, string.Empty);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -70,49 +30,47 @@ namespace WpfAppProV2
                 DragMove();
         }
 
-        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                    string.IsNullOrWhiteSpace(txtCorreo.Text) ||
-                    string.IsNullOrWhiteSpace(txtTelefono.Text))
-                {
-                    MessageBox.Show(
-                        "Completa todos los campos.",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning
-                    );
-                    return;
-                }
-
-                int id = File.ReadAllLines(rutaArchivo).Length + 1;
-
-                string linea = $"{id},{txtNombre.Text},{txtCorreo.Text},{txtTelefono.Text}";
-                File.AppendAllText(rutaArchivo, linea + Environment.NewLine);
-
-                MessageBox.Show(
-                    "Cliente frecuente guardado correctamente!",
-                    "Éxito",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-
-                Limpiar();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Error al guardar: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
+            WindowState = WindowState.Minimized;
         }
 
-        private void Limpiar()
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void btnVolver_Click(object sender, RoutedEventArgs e)
+        {
+            Window ventanaDestino;
+            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
+                ventanaDestino = new PanelSuperAdmin(_rolUsuario);
+            else
+                ventanaDestino = new AdminPanel(_rolUsuario);
+
+            ventanaDestino.Show();
+            this.Close();
+        }
+
+        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                string.IsNullOrWhiteSpace(txtCorreo.Text) ||
+                string.IsNullOrWhiteSpace(txtTelefono.Text))
+            {
+                MessageBox.Show("Completa todos los campos.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            int id = File.ReadAllLines(_rutaArchivo).Length + 1;
+            string linea = $"{id},{txtNombre.Text},{txtCorreo.Text},{txtTelefono.Text}";
+            File.AppendAllText(_rutaArchivo, linea + Environment.NewLine);
+
+            MessageBox.Show("Cliente frecuente registrado correctamente!", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            LimpiarCampos();
+        }
+
+        private void LimpiarCampos()
         {
             txtNombre.Clear();
             txtCorreo.Clear();

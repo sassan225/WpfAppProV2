@@ -61,11 +61,11 @@ namespace WpfAppProV2
 
             if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
             {
-                ventanaDestino = new PanelSuperAdmin();
+                ventanaDestino = new PanelSuperAdmin(_rolUsuario);
             }
             else if (_rolUsuario.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
             {
-                ventanaDestino = new AdminPanel();
+                ventanaDestino = new AdminPanel(_rolUsuario);
             }
             else
             {

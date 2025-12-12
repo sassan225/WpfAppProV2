@@ -8,106 +8,97 @@ namespace WpfAppProV2
 {
     public partial class MainWindow : Window
     {
-        private readonly string rutaArchLogin = @"C:\cosmetiqueSoftware\loginsPro.txt";
+        private readonly string rutaSuperadmins = @"C:\cosmetiqueSoftware\superadmins.txt";
+        private readonly string rutaAdmins = @"C:\cosmetiqueSoftware\loginsPro.txt";
 
         public MainWindow()
         {
             InitializeComponent();
 
-            string carpeta = Path.GetDirectoryName(rutaArchLogin);
+            string carpeta = @"C:\cosmetiqueSoftware";
             if (!Directory.Exists(carpeta))
                 Directory.CreateDirectory(carpeta);
 
-            if (!File.Exists(rutaArchLogin))
-                File.WriteAllText(rutaArchLogin, string.Empty, Encoding.UTF8);
+            if (!File.Exists(rutaSuperadmins))
+                File.WriteAllText(rutaSuperadmins, "Super,Admin,N/A,N/A,N/A,1234,SUPERADMIN,super@cosmetique.com", Encoding.UTF8);
+
+            if (!File.Exists(rutaAdmins))
+                File.WriteAllText(rutaAdmins, string.Empty, Encoding.UTF8);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
-        private void btnMinimizar_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void btnCerrar_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
+        private void btnMinimizar_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+        private void btnCerrar_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string usuarioIngresado = txtUser.Text.Trim();
-            string contraseniaIngresado = txtpass.Password.Trim();
+            string usuario = txtUser.Text.Trim();
+            string contrasenia = txtpass.Password.Trim();
 
-            string rolUsuario = null;
-            string nombreUsuario = null;
+            if (ValidarLogin(rutaSuperadmins, usuario, contrasenia, out string rol, out string nombre) ||
+                ValidarLogin(rutaAdmins, usuario, contrasenia, out rol, out nombre))
+            {
+                MessageBox.Show($"Bienvenido {nombre} ({rol})", "Login exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
+                App.Current.Properties["RolUsuario"] = rol;
+                App.Current.Properties["NombreUsuario"] = nombre;
+
+                if (rol == "SUPERADMIN")
+                    new PanelSuperAdmin(rol).Show();
+                else
+                    new AdminPanel(rol).Show();
+
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Usuario o contraseña incorrectos.", "Error de login", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private bool ValidarLogin(string rutaArchivo, string usuario, string contrasenia, out string rol, out string nombre)
+        {
+            rol = null;
+            nombre = null;
 
             try
             {
-                foreach (string linea in File.ReadAllLines(rutaArchLogin, Encoding.UTF8))
+                string[] lineas = File.ReadAllLines(rutaArchivo, Encoding.UTF8);
+                foreach (var linea in lineas)
                 {
-                    string[] datos = linea.Split(',');
+                    var datos = linea.Split(',');
+                    if (datos.Length < 8) continue;
 
-                    if (datos.Length < 4) continue;
+                    string n = datos[0].Trim();
+                    string ap = datos[1].Trim();
+                    string am = datos[2].Trim();
+                    string contr = datos[5].Trim();
+                    string r = datos[6].Trim();
+                    string correo = datos[7].Trim();
 
-                    string nombre = datos[0];
-                    string correo = datos[1];
-                    string rol = datos[2];
-                    string pwd = datos[3];
-
-                    if (usuarioIngresado == correo && contraseniaIngresado == pwd)
+                    if (usuario == correo && contrasenia == contr)
                     {
-                        rolUsuario = rol.Trim();
-                        nombreUsuario = nombre.Trim();
-                        break;
+                        rol = r;
+                        nombre = $"{n} {ap} {am}";
+                        return true;
                     }
                 }
             }
             catch
             {
-                MessageBox.Show("Error al leer el archivo de logins.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                MessageBox.Show($"Error al leer el archivo: {rutaArchivo}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            if (rolUsuario != null)
-            {
-                MessageBox.Show($"Bienvenido {nombreUsuario} ({rolUsuario})",
-                    "Login exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // Guardar globalmente
-                App.Current.Properties["RolUsuario"] = rolUsuario;
-                App.Current.Properties["NombreUsuario"] = nombreUsuario;
-
-                // Abrir panel según rol
-                if (rolUsuario == "SUPERADMIN")
-                {
-                    PanelSuperAdmin panel = new PanelSuperAdmin();
-                    panel.Show();
-                }
-                else if (rolUsuario == "ADMIN")
-                {
-                    AdminPanel panel = new AdminPanel();
-                    panel.Show();
-                }
-
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Usuario o contraseña incorrectos.");
-            }
+            return false;
         }
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-            SignUp signup = new SignUp();
-            signup.Show();
-            this.Close();
+            new SignUp().Show();
+            Close();
         }
     }
 }
