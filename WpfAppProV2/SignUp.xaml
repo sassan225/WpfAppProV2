@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Sign Up"
     Width="797"
-    Height="566"
+    Height="736"
     AllowsTransparency="True"
     Background="Transparent"
     MouseDown="Window_MouseDown"

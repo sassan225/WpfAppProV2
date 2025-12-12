@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfAppProV2
+﻿public class Admin
 {
-    internal class Admin
+    private static int contadorId = 1;
+
+    public int IdAdmin { get; set; }
+    public string Nombre { get; set; }
+    public string ApellidoP { get; set; }
+    public string ApellidoM { get; set; }
+    public string Telefono { get; set; }
+    public int AnioNacimiento { get; set; }
+    public string Contraseña { get; set; }
+    public string Correo { get; set; }
+
+    // Propiedad calculada para mostrar en DataGrid
+    public string NombreCompleto => $"{Nombre} {ApellidoP} {ApellidoM}";
+
+    public Admin()
     {
-        private static int contadorId = 1;
+        IdAdmin = contadorId++;
+    }
 
-        public int IdAdmin { get; set; }
-        public string Nombre { get; set; }
-        public string Correo { get; set; }
-        public string Contraseña { get; set; }
-
-        public Admin()
-        {
-            IdAdmin = contadorId++;
-        }
-
-        public override string ToString()
-        {
-            return $"{IdAdmin},{Nombre},{Correo},{Contraseña}";
-        }
+    public override string ToString()
+    {
+        return $"{Nombre},{ApellidoP},{ApellidoM},{Telefono},{AnioNacimiento},{Contraseña},{Correo}";
     }
 }

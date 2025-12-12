@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace WpfAppProV2
 {
@@ -17,40 +18,56 @@ namespace WpfAppProV2
             _rolUsuario = rolUsuario;
 
             if (!Directory.Exists(_carpetaBase))
-            {
                 Directory.CreateDirectory(_carpetaBase);
-            }
 
             _rutaArchivo = Path.Combine(_carpetaBase, "productos.txt");
-
             if (!File.Exists(_rutaArchivo))
-            {
                 File.WriteAllText(_rutaArchivo, string.Empty);
-            }
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
+            string nombre = txtNombre.Text.Trim();
+            string categoria = (cmbCategoria.SelectedItem as System.Windows.Controls.ComboBoxItem)?.Content.ToString();
+            string precioText = txtPrecio.Text.Trim();
+            string stockText = txtStock.Text.Trim();
+
+            // Validaciones básicas
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(categoria) ||
+                string.IsNullOrWhiteSpace(precioText) || string.IsNullOrWhiteSpace(stockText))
+            {
+                MessageBox.Show("Completa todos los campos.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validar nombre (solo letras, números y espacios)
+            Regex nombreRegex = new Regex(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]+$");
+            if (!nombreRegex.IsMatch(nombre))
+            {
+                MessageBox.Show("El nombre del producto solo puede contener letras, números y espacios.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validar precio (decimal positivo)
+            decimal precio;
+            if (!Decimal.TryParse(precioText, out precio) || precio < 0)
+            {
+                MessageBox.Show("Ingresa un precio válido.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validar stock (entero positivo)
+            int stock;
+            if (!Int32.TryParse(stockText, out stock) || stock < 0)
+            {
+                MessageBox.Show("Ingresa un stock válido.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
-                if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                    cmbCategoria.SelectedItem == null ||
-                    string.IsNullOrWhiteSpace(txtPrecio.Text) ||
-                    string.IsNullOrWhiteSpace(txtStock.Text))
-                {
-                    MessageBox.Show("Completa todos los campos.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
                 int id = File.ReadAllLines(_rutaArchivo).Length + 1;
-
-                string categoria = (cmbCategoria.SelectedItem as System.Windows.Controls.ComboBoxItem).Content.ToString();
-
-                Producto p = new Producto(id, txtNombre.Text, categoria,
-                                          Convert.ToDecimal(txtPrecio.Text),
-                                          Convert.ToInt32(txtStock.Text));
-
-                string linea = p.Id + "," + p.Nombre + "," + p.Categoria + "," + p.Precio + "," + p.Stock;
+                string linea = id + "," + nombre + "," + categoria + "," + precio + "," + stock;
                 File.AppendAllText(_rutaArchivo, linea + Environment.NewLine);
 
                 MessageBox.Show("Producto guardado correctamente!", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -83,9 +100,7 @@ namespace WpfAppProV2
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
-            {
                 this.DragMove();
-            }
         }
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
@@ -93,13 +108,9 @@ namespace WpfAppProV2
             Window ventanaDestino;
 
             if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
-            {
                 ventanaDestino = new PanelSuperAdmin(_rolUsuario);
-            }
             else if (_rolUsuario.Equals("admin", StringComparison.OrdinalIgnoreCase))
-            {
                 ventanaDestino = new AdminPanel(_rolUsuario);
-            }
             else
             {
                 MessageBox.Show("Rol desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -108,30 +119,6 @@ namespace WpfAppProV2
 
             ventanaDestino.Show();
             this.Close();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            Window ventanaDestino;
-
-            if (_rolUsuario.Equals("superadmin", StringComparison.OrdinalIgnoreCase))
-            {
-                ventanaDestino = new PanelSuperAdmin(_rolUsuario);
-            }
-            else if (_rolUsuario.Equals("admin", StringComparison.OrdinalIgnoreCase))
-            {
-                ventanaDestino = new AdminPanel(_rolUsuario);
-            }
-            else
-            {
-                MessageBox.Show("Rol desconocido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            ventanaDestino.Show();
-            this.Close();
-
         }
     }
 }

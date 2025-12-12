@@ -23,43 +23,49 @@ namespace WpfAppProV2
         {
             listaAdmins = new List<Admin>();
 
-            if (File.Exists(rutaArchivo))
+            if (!File.Exists(rutaArchivo))
             {
-                string[] lineas = File.ReadAllLines(rutaArchivo);
+                File.WriteAllText(rutaArchivo, string.Empty);
+            }
 
-                foreach (string linea in lineas)
-                {
-                    if (string.IsNullOrWhiteSpace(linea))
-                        continue;
+            string[] lineas = File.ReadAllLines(rutaArchivo);
 
-                    string[] datos = linea.Split(',');
+            foreach (string linea in lineas)
+            {
+                if (string.IsNullOrWhiteSpace(linea))
+                    continue;
 
-                    // Aseguramos que tenga mínimo los campos necesarios y sea ADMIN
-                    if (datos.Length >= 8 && datos[6].Trim().ToUpper() == "ADMIN")
-                    {
-                        Admin admin = new Admin();
-                        admin.Nombre = datos[0].Trim() + " " + datos[1].Trim() + " " + datos[2].Trim();
-                        admin.Correo = datos[7].Trim();
-                        admin.Contraseña = datos[5].Trim();
+                string[] datos = linea.Split(',');
 
-                        listaAdmins.Add(admin);
-                    }
-                }
+                if (datos.Length < 7)
+                    continue;
+
+                Admin admin = new Admin();
+                admin.Nombre = datos[0].Trim();
+                admin.ApellidoP = datos[1].Trim();
+                admin.ApellidoM = datos[2].Trim();
+                admin.Telefono = datos[3].Trim();
+                int anio;
+                if (!int.TryParse(datos[4].Trim(), out anio))
+                    anio = 0;
+                admin.AnioNacimiento = anio;
+                admin.Contraseña = datos[5].Trim();
+                admin.Correo = datos[6].Trim();
+
+                listaAdmins.Add(admin);
             }
 
             dgAdmins.ItemsSource = null;
             dgAdmins.ItemsSource = listaAdmins;
         }
 
-        // Abrir ventana de registrar admin
         private void btnAñadir_Click(object sender, RoutedEventArgs e)
         {
-            RegistrarAdmin registrarAdmin = new RegistrarAdmin(_rolUsuario);
-            registrarAdmin.ShowDialog();
+            RegistrarAdmin registrar = new RegistrarAdmin(_rolUsuario);
+            registrar.ShowDialog();
             CargarAdmins();
         }
 
-        // Borrar admin seleccionado
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dgAdmins.SelectedItem == null)
@@ -71,7 +77,7 @@ namespace WpfAppProV2
             Admin adminSeleccionado = (Admin)dgAdmins.SelectedItem;
 
             MessageBoxResult confirm = MessageBox.Show(
-                "¿Seguro que quieres borrar al admin " + adminSeleccionado.Nombre + "?",
+                "¿Seguro que quieres borrar al admin " + adminSeleccionado.NombreCompleto + "?",
                 "Confirmar borrado",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
@@ -80,17 +86,25 @@ namespace WpfAppProV2
             if (confirm != MessageBoxResult.Yes)
                 return;
 
-            List<string> lineasActuales = new List<string>(File.ReadAllLines(rutaArchivo));
+            string[] lineas = File.ReadAllLines(rutaArchivo);
             List<string> lineasFiltradas = new List<string>();
 
-            foreach (string linea in lineasActuales)
+            foreach (string linea in lineas)
             {
+                if (string.IsNullOrWhiteSpace(linea))
+                    continue;
+
                 string[] datos = linea.Split(',');
+                if (datos.Length < 7)
+                {
+                    lineasFiltradas.Add(linea);
+                    continue;
+                }
 
-                if (datos.Length >= 8 && datos[7].Trim() == adminSeleccionado.Correo)
-                    continue; // saltamos la línea del admin a borrar
-
-                lineasFiltradas.Add(linea);
+                if (datos[6].Trim() != adminSeleccionado.Correo)
+                {
+                    lineasFiltradas.Add(linea);
+                }
             }
 
             File.WriteAllLines(rutaArchivo, lineasFiltradas.ToArray());
@@ -99,8 +113,8 @@ namespace WpfAppProV2
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            PanelSuperAdmin panelSuperAdmin = new PanelSuperAdmin(_rolUsuario);
-            panelSuperAdmin.Show();
+            PanelSuperAdmin panel = new PanelSuperAdmin(_rolUsuario);
+            panel.Show();
             this.Close();
         }
 

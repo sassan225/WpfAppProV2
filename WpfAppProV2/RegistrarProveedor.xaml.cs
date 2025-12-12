@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace WpfAppProV2
 {
@@ -30,29 +31,104 @@ namespace WpfAppProV2
         // Guardar proveedor
         private void btnGuardarProveedor_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNombreProveedor.Text) ||
-                string.IsNullOrWhiteSpace(txtContactoProveedor.Text) ||
-                string.IsNullOrWhiteSpace(txtCiudadProveedor.Text))
+            string nombre = txtNombreProveedor.Text.Trim();
+            string contacto = txtContactoProveedor.Text.Trim();
+            string ciudad = txtCiudadProveedor.Text.Trim();
+
+            // Validar campos vacíos
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(contacto) || string.IsNullOrWhiteSpace(ciudad))
             {
                 MessageBox.Show("Completa todos los campos.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // Validar nombre y ciudad (solo letras y espacios)
+            Regex letraRegex = new Regex(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$");
+            if (!letraRegex.IsMatch(nombre))
+            {
+                MessageBox.Show("El nombre del proveedor solo puede contener letras y espacios.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (!letraRegex.IsMatch(ciudad))
+            {
+                MessageBox.Show("La ciudad solo puede contener letras y espacios.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validar contacto: teléfono (8-10 dígitos) o correo
+            Regex telefonoRegex = new Regex(@"^\d{8,10}$");
+            Regex correoRegex = new Regex(@"^[\w\.-]+@[\w\.-]+\.\w{2,}$");
+            if (!telefonoRegex.IsMatch(contacto) && !correoRegex.IsMatch(contacto))
+            {
+                MessageBox.Show("El contacto debe ser un número de teléfono válido (8-10 dígitos) o un correo electrónico válido.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validar duplicados por nombre
+            bool existe = false;
+            if (File.Exists(_rutaArchivo))
+            {
+                string[] lineas = File.ReadAllLines(_rutaArchivo);
+                for (int i = 0; i < lineas.Length; i++)
+                {
+                    string linea = lineas[i];
+                    if (string.IsNullOrWhiteSpace(linea)) continue;
+                    string[] datos = linea.Split(',');
+                    if (datos.Length >= 2 && datos[1].Trim().ToLower() == nombre.ToLower())
+                    {
+                        existe = true;
+                        break;
+                    }
+                }
+            }
+
+            if (existe)
+            {
+                MessageBox.Show("Este proveedor ya está registrado.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
-                string linea = txtNombreProveedor.Text.Trim() + "," +
-                               txtContactoProveedor.Text.Trim() + "," +
-                               txtCiudadProveedor.Text.Trim();
-
+                int nuevoId = ObtenerNuevoId();
+                string linea = nuevoId + "," + nombre + "," + contacto + "," + ciudad;
                 File.AppendAllText(_rutaArchivo, linea + Environment.NewLine);
-                MessageBox.Show("Proveedor guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                MessageBox.Show("Proveedor guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 LimpiarCampos();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar proveedor: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+
+
+        // Obtener nuevo ID
+        private int ObtenerNuevoId()
+        {
+            int maxId = 0;
+            if (File.Exists(_rutaArchivo))
+            {
+                string[] lineas = File.ReadAllLines(_rutaArchivo);
+                for (int i = 0; i < lineas.Length; i++)
+                {
+                    string linea = lineas[i];
+                    if (string.IsNullOrWhiteSpace(linea)) continue;
+                    string[] datos = linea.Split(',');
+                    if (datos.Length >= 1)
+                    {
+                        int id;
+                        if (int.TryParse(datos[0], out id))
+                        {
+                            if (id > maxId)
+                                maxId = id;
+                        }
+                    }
+                }
+            }
+            return maxId + 1;
         }
 
         // Limpiar campos

@@ -26,8 +26,15 @@ namespace WpfAppProV2
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
-        private void btnMinimizar_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
-        private void btnCerrar_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
+        private void btnMinimizar_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void btnCerrar_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
@@ -44,53 +51,82 @@ namespace WpfAppProV2
                 string.IsNullOrWhiteSpace(year) || string.IsNullOrWhiteSpace(contrasenia) ||
                 string.IsNullOrWhiteSpace(regCode))
             {
-                MessageBox.Show("Todos los campos son obligatorios."); return;
+                MessageBox.Show("Todos los campos son obligatorios.");
+                return;
             }
 
             if (!Regex.IsMatch(nombre + apellidoP + apellidoM, @"^[a-zA-Z]+$"))
             {
-                MessageBox.Show("Nombre y apellidos solo deben contener letras."); return;
+                MessageBox.Show("Nombre y apellidos solo deben contener letras.");
+                return;
             }
 
             if (!Regex.IsMatch(telefono, @"^\d+$"))
             {
-                MessageBox.Show("El teléfono solo debe contener números."); return;
+                MessageBox.Show("El teléfono solo debe contener números.");
+                return;
             }
 
             if (!int.TryParse(year, out int anioNacimiento) || anioNacimiento < 1940 || anioNacimiento > DateTime.Now.Year - 10)
             {
-                MessageBox.Show("Año de nacimiento inválido."); return;
+                MessageBox.Show("Año de nacimiento inválido.");
+                return;
             }
 
             if (!Regex.IsMatch(contrasenia, @"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"))
             {
-                MessageBox.Show("La contraseña debe contener mayúscula, minúscula y número."); return;
+                MessageBox.Show("La contraseña debe contener mayúscula, minúscula y número.");
+                return;
             }
 
-            // Validar código
+            // Validar código sin lambda
             string[] codigos = File.ReadAllLines(rutaCodigos);
-            if (!Array.Exists(codigos, c => c == regCode))
+            bool codigoValido = false;
+            for (int i = 0; i < codigos.Length; i++)
             {
-                MessageBox.Show("Código de registro inválido o expirado."); return;
+                if (codigos[i] == regCode)
+                {
+                    codigoValido = true;
+                    break;
+                }
             }
 
-            string correo = $"{nombre.ToLower()}.{apellidoP.ToLower()}@cosmetique.com";
+            if (!codigoValido)
+            {
+                MessageBox.Show("Código de registro inválido o expirado.");
+                return;
+            }
+
+            string correo = nombre.ToLower() + "." + apellidoP.ToLower() + "@cosmetique.com";
 
             string datos = string.Join(",", nombre, apellidoP, apellidoM, telefono, anioNacimiento, contrasenia, "ADMIN", correo);
             File.AppendAllText(rutaAdmins, datos + Environment.NewLine, Encoding.UTF8);
 
-            // Eliminar código usado
-            File.WriteAllLines(rutaCodigos, Array.FindAll(codigos, c => c != regCode));
 
-            MessageBox.Show($"Admin registrado correctamente.\nCorreo generado: {correo}");
-            new MainWindow().Show();
-            Close();
+            string[] nuevosCodigos = new string[0];
+            int count = 0;
+            for (int i = 0; i < codigos.Length; i++)
+            {
+                if (codigos[i] != regCode)
+                {
+                    Array.Resize(ref nuevosCodigos, count + 1);
+                    nuevosCodigos[count] = codigos[i];
+                    count++;
+                }
+            }
+            File.WriteAllLines(rutaCodigos, nuevosCodigos);
+
+            MessageBox.Show("Admin registrado correctamente.\nCorreo generado: " + correo);
+            MainWindow main = new MainWindow();
+            main.Show();
+            this.Close();
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            new MainWindow().Show();
-            Close();
+            MainWindow main = new MainWindow();
+            main.Show();
+            this.Close();
         }
     }
 }
